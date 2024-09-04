@@ -1,4 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
+const SALT_ROUNDS = 10; // Number of salt rounds for bcryp
 
 // Helper function to open and close the database
 function openDb() {
@@ -23,6 +25,18 @@ function createTables() {
         availability_status VARCHAR(20)
       );
     `);
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS Users (
+        user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        password_hash VARCHAR(255) NOT NULL,
+        interpreter_id INTEGER,
+        FOREIGN KEY (interpreter_id) REFERENCES Interpreters(interpreter_id) ON DELETE CASCADE
+      );
+    `);   
+
+
 
     db.run(`
       CREATE TABLE IF NOT EXISTS Events (
@@ -331,3 +345,110 @@ createTables();  // Create tables at the start
 //  .catch((err) => console.error('Error:', err));
 
 // Continue adding other functions or example usage as needed
+
+
+
+//Login code
+// Function to check if a user already exists
+async function userExists(username) 
+{
+  const db = openDb();
+  return new Promise((resolve, reject) => {
+    db.get(`SELECT username FROM Users WHERE username = ?`, [username], (err, row) => {
+      db.close();
+      if (err) {
+        reject('Error checking user existence: ' + err.message);
+      } else {
+        resolve(!!row);
+      }
+    });
+  });
+}
+
+// Function to register a new user
+async function registerUser(username, password, interpreterId = null) {
+  if (!isValidPassword(password)) {
+    throw new Error('Password must be at least 8 characters long and contain a mix of letters, numbers, and symbols.');
+  }
+
+  const userAlreadyExists = await userExists(username);
+  if (userAlreadyExists) {
+    throw new Error('Username already exists.');
+  }
+
+  const db = openDb();
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, SALT_ROUNDS, (err, hash) => {
+      if (err) {
+        db.close();
+        return reject('Error hashing password: ' + err.message);
+      }
+
+      db.run(
+        `INSERT INTO Users (username, password_hash, interpreter_id) VALUES (?, ?, ?)`,
+        [username, hash, interpreterId],
+        function (err) {
+          db.close();
+          if (err) {
+            reject('Error registering user: ' + err.message);
+          } else {
+            resolve(`User registered with ID: ${this.lastID}`);
+          }
+        }
+      );
+    });
+  });
+}
+
+// Function to validate a user
+async function validateUser(username, password) {
+  const db = openDb();
+  return new Promise((resolve, reject) => {
+    db.get(
+      `SELECT password_hash FROM Users WHERE username = ?`,
+      [username],
+      (err, row) => {
+        db.close();
+        if (err) {
+          return reject('Error fetching user: ' + err.message);
+        }
+        if (!row) {
+          return reject('Invalid username or password.');
+        }
+
+        bcrypt.compare(password, row.password_hash, (err, result) => {
+          if (err) {
+            return reject('Error comparing passwords: ' + err.message);
+          }
+          if (result) {
+            resolve('User validated successfully.');
+          } else {
+            reject('Invalid username or password.');
+          }
+        });
+      }
+    );
+  });
+}
+
+// Utility function to validate password strength
+function isValidPassword(password) {
+  const minLength = 8;
+  const regex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/;
+  return password.length >= minLength && regex.test(password);
+}
+
+// Example Usage of Functions
+/*(async () => {
+  await createTables(); // Create tables at the start
+
+  try {
+    const registerResult = await registerUser('john_doe', 'SecurePass123!', 1);
+    console.log(registerResult);
+    
+    const validationResult = await validateUser('john_doe', 'SecurePass123!');
+    console.log(validationResult);
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+})();*/
