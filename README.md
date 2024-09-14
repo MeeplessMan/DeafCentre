@@ -30,3 +30,4 @@ The current project is being coded in Javascript. It is using node.js as the run
     "morgan": "^1.10.0",
     "mysql2": "^3.11.2"
 }
+- Fomor
