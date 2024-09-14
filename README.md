@@ -1,5 +1,5 @@
 # DeafCentre
-![DUT logo image](/public/Images/dut-logo.jpg)
+![DUT logo image](/public/images/dut-logo.jpg)
 This current project is being coded in javascript. It is using node.js as the runtime for running javascript code and npm package manage to install and manage packages.
 =You need to have node.js installed and npm package manager installed in order to run the project. Install [node.js](https://nodejs.org/en/download/prebuilt-installer) if it hasnt already been installed. The prebuilt installer already comes with npm package manager installed
 -Follow the instructions and by the end it should be installed you can check in cmd(command promt) if it is instaled by typing: 
