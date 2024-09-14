@@ -29,5 +29,4 @@ The current project is being coded in Javascript. It is using node.js as the run
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
     "mysql2": "^3.11.2"
-  }
-``
+}
