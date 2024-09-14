@@ -16,16 +16,16 @@ app.use(express.static('public'));
 app.use(morgan('tiny'));
 
 app.get('/home', (req, res) =>{
-    res.render('home');
+    res.status(200).render('home');
 });
 app.get('/about',(req,res)=>{
-    res.render('about');
+    res.status(200).render('about');
 });
 app.get('/login',(req, res)=>{
-    res.render('login');
+    res.status(200).render('login');
 });
 app.get('/',(req,res)=>{
-    res.render('home');
+    res.status(200).render('home');
 });
 
 app.use((req,res)=>{
