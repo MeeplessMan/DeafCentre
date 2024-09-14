@@ -10,7 +10,14 @@ The current project is being coded in Javascript. It is using node.js as the run
                     `node -v`
  And for npm you can check by typing: `npm --v`
 
-- After node.js has been installed clone the repositary into a folder. From there you need to insall the packages for the project through npm package manager. You can do this by      typying `npm install` which installs all the dependancies listed int the package.json. 
+- Node.js is now installed onto your computer. Now you need to change your Execution policy to unrestricted in the administrator window powershell by running the command:
+                    `Set-ExecutionPolicy Unrestricted`
+To check if the policy has been changed you can type the command: `Get-ExecutionPolicy`
+
+- After changing your Execution policy to Unrestricted, you now need to install a package globally into your packages. In command prompt your need to type in:
+                    `npm install -g nodemon`
+
+- After node.js has been installed clone the repositary into a folder. From there you need to insall the packages for the project through npm package manager. You can do this by typying `npm install` which installs all the dependancies listed int the package.json. 
 
 - After all packages have been installed you can now run through project by typing in terminal:
                     `nodemon app`
