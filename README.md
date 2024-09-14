@@ -17,3 +17,17 @@ The current project is being coded in Javascript. It is using node.js as the run
  this runs the app.js file which opens a local server on your computer which waits for requests from your browser. You can test that it is recieving requests by typing in the url in your search bar: localhost:3000 - and this should direct you to the home page for the application.
 
 - To close the server in vscode you need to need to click back on the terminal and use the keyboard shortcut `ctrl+C` on your keyboard to close the server
+
+## Dependacies
+
+- The packages currently installed are:
+
+```javascript
+"dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.2"
+  }
+``
