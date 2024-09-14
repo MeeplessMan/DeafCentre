@@ -23,11 +23,9 @@ The current project is being coded in Javascript. It is using node.js as the run
 - The packages currently installed are:
 
 ```javascript
-"dependencies": {
-    "ejs": "^3.1.10",
-    "express": "^4.21.0",
-    "lodash": "^4.17.21",
-    "morgan": "^1.10.0",
-    "mysql2": "^3.11.2"
-}
-- Fomor
+"ejs": "^3.1.10",
+"express": "^4.21.0",
+"lodash": "^4.17.21",
+"morgan": "^1.10.0",
+"mysql2": "^3.11.2"
+```
