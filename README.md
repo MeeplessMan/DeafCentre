@@ -30,7 +30,8 @@ To check if the policy has been changed you can type the command: `Get-Execution
 - The database we are using for the project is MySQL. To make the database in your own MySQL server you will need to synchronize the EER diagram in your  MySQL workbench through reverse engineering.(The EER diagram will be uploaded)
 
 - The database(deafcentre) so far is made up of 6 tables:
-    - interpreters
+![Deafcentre ERD](/public/images/EER.png)
+    - interpreters                               
     - interpreters_users
     - lecturers
     - lecturers_users
