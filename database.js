@@ -10,14 +10,14 @@ const pool = mysql.createPool({
 
 //TABLE interpreters_users functions?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-async function getIntUsers(){
+export async function getIntUsers(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM interpreters_users`);
     return rows;
 }
 
-async function valIntUser(user, password){
+export async function valIntUser(user, password){
     const [row] = await pool.query(`
         SELECT * 
         FROM interpreters_users
@@ -26,7 +26,7 @@ async function valIntUser(user, password){
     return await bcrypt.compare(password, row[0].user_passwordhash);
 }
 
-async function createIntUser(user, password){
+export async function createIntUser(user, password){
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password,salt);
     await pool.query(`
@@ -35,7 +35,7 @@ async function createIntUser(user, password){
         `, [user,hashedPassword]);
 }
 
-async function getIntUser(user, password){
+export async function getIntUser(user, password){
     if(await valIntUser(user,password)){return false}
     const [row] = await pool.query(`
         SELECT * 
@@ -44,7 +44,7 @@ async function getIntUser(user, password){
     return row[0];
 }
 
-async function setIntUserPass(user, newPass){
+export async function setIntUserPass(user, newPass){
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPass,salt);
     await pool.query(`UPDATE interpreters_users 
@@ -54,27 +54,27 @@ async function setIntUserPass(user, newPass){
 
 //TABLE interpreters functions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-async function createInt(id,fname,lname,pnum,status,email){
+export async function createInt(id,fname,lname,pnum,status,email){
      await pool.query(`
         INSERT IGNORE INTO interpreters(interpreter_id, interpreter_firstname, interpreter_lastname, interpreter_phonenum, interpreter_status, user_email)
         VALUES(?,?,?,?,?,?)`,[id,fname,lname,pnum,status,email]);
 }
 
-async function getInts(){
+export async function getInts(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM interpreters`);
     return rows;
 }
 
-async function getInt(){
+export async function getInt(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM interpreters`);
     return rows[0];
 }
 
-async function setIntStatus(id,val){
+export async function setIntStatus(id,val){
     await pool.query(`
         UPDATE interpreters
         SET interpreters_status = ?
@@ -83,7 +83,7 @@ async function setIntStatus(id,val){
 }
 
 //TABLE students_users>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-async function valStudentUser(user, password){
+export async function valStudentUser(user, password){
     const [row] = await pool.query(`
         SELECT * 
         FROM students_users
@@ -92,7 +92,7 @@ async function valStudentUser(user, password){
     return await bcrypt.compare(password, row[0].user_passwordhash);
 }
 
-async function setStudentUserPass(user, newPass){
+export async function setStudentUserPass(user, newPass){
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPass,salt);
     await pool.query(`UPDATE students_users 
@@ -100,14 +100,14 @@ async function setStudentUserPass(user, newPass){
         WHERE user_email = ?`,[hashedPassword,user]);
 }
 
-async function getStudentUsers(){
+export async function getStudentUsers(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM students_users`);
     return rows;
 }
 
-async function getStudentUser(user, password){
+export async function getStudentUser(user, password){
     if(!await valIntUser(user,password)){return false}
     const [row] = await pool.query(`
         SELECT * 
@@ -116,7 +116,7 @@ async function getStudentUser(user, password){
     return row[0];
 }
 
-async function createStudentUser(user, password){
+export async function createStudentUser(user, password){
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password,salt);
     await pool.query(`
@@ -126,14 +126,14 @@ async function createStudentUser(user, password){
 }
 
 //TABLE students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-async function getStudents(){
+export async function getStudents(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM students`);
     return rows[0];
 }
 
-async function getStudent(num){
+export async function getStudent(num){
     const [rows] = await pool.query(`
         SELECT *
         FROM students
@@ -142,7 +142,7 @@ async function getStudent(num){
     return rows[0];
 }
 
-async function createStudent(num, fname, lname, pnum, email){
+export async function createStudent(num, fname, lname, pnum, email){
     await pool.query(`
        INSERT IGNORE INTO students(student_num, student_firstname, student_lastname, student_phonenum, user_email)
        VALUES(?,?,?,?,?,?)`,[num, fname, lname, pnum, email]);
@@ -150,7 +150,7 @@ async function createStudent(num, fname, lname, pnum, email){
 
 //TABLE lecturers>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-async function valLecturerUser(user, password){
+export async function valLecturerUser(user, password){
     const [row] = await pool.query(`
         SELECT * 
         FROM lecturers_users
@@ -159,7 +159,7 @@ async function valLecturerUser(user, password){
     return await bcrypt.compare(password, row[0].user_passwordhash);
 }
 
-async function setLecturerUserPass(user, newPass){
+export async function setLecturerUserPass(user, newPass){
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPass,salt);
     await pool.query(`UPDATE students_users 
@@ -167,14 +167,14 @@ async function setLecturerUserPass(user, newPass){
         WHERE user_email = ?`,[hashedPassword,user]);
 }
 
-async function getLecturerUsers(){
+export async function getLecturerUsers(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM lecturers_users`);
     return rows;
 }
 
-async function getLecturerUser(user, password){
+export async function getLecturerUser(user, password){
     if(!await valIntUser(user,password)){return false}
     const [row] = await pool.query(`
         SELECT * 
@@ -183,7 +183,7 @@ async function getLecturerUser(user, password){
     return row[0];
 }
 
-async function createLecturerUser(user, password){
+export async function createLecturerUser(user, password){
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password,salt);
     await pool.query(`
@@ -194,14 +194,14 @@ async function createLecturerUser(user, password){
 
 //TABLES students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-async function getLecturers(){
+export async function getLecturers(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM lecturers`);
     return rows;
 }
 
-async function getLecturer(num){
+export async function getLecturer(num){
     const [rows] = await pool.query(`
         SELECT *
         FROM lecturers
@@ -210,11 +210,19 @@ async function getLecturer(num){
     return rows[0];
 }
 
-async function createLecuter(num, fname, lname, dep, pnum, email){
+export async function createLecturer(num, fname, lname, dep, pnum, email){
     await pool.query(`
        INSERT IGNORE INTO lecturers(lecturer_num, lecturer_firstname, lecturer_lastname, lecturer_department, lecturer_phonenum, user_email)
        VALUES(?,?,?,?,?,?)`,[num, fname, lname, dep, pnum, email]);
 }
 
-console.log(await getInts());
+await createLecturerUser('atesh@gmail.com','Atesh1');
+await createLecturerUser('prevani@gmail.com','Atesh2');
+await createLecturerUser('avishendran@gmail.com','Atesh3');
+await createStudentUser('22382901@dut4life.ac.za','Atesh4');
+await createStudentUser('22581901@dut4life.ac.za','Atesh5');
+await createStudentUser('22583901@dut4life.ac.za','Atesh6');
+await createIntUser('225921245@dut4life.ac.za','Atesh1');
+await createIntUser('225921244@dut4life.ac.za','Atesh1');
+await createIntUser('22382901@dut4life.ac.za','Prevani');
 pool.end();

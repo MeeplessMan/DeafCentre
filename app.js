@@ -1,12 +1,18 @@
-const express = require('express');
-const morgan = require('morgan');
+import express from 'express'
+import morgan from 'morgan'
+import * as data from './database.js'
+import studentRoute from './routes/student.js'
+import interpreterRoute from './routes/interpreter.js'
+import lecturerRoute from './routes/lecturer.js'
+import indexRoute from './routes/index.js'
+
 //express app
 const app = express();
-const path = './Html Files/';
+const path = './views/';
 
 //register view engine
 app.set('view engine','ejs');
-app.set('views', 'Html Files');
+
 
 //listen for requests
 app.listen(3000);
@@ -15,19 +21,10 @@ app.use(express.static('public'));
 //Shows requests(middleware)
 app.use(morgan('tiny'));
 
-app.get('/home', (req, res) =>{
-    res.status(200).render('home');
-});
-app.get('/about',(req,res)=>{
-    res.status(200).render('about');
-});
-app.get('/login',(req, res)=>{
-    res.status(200).render('login');
-});
-app.get('/',(req,res)=>{
-    res.status(200).render('home');
-});
+//Routes
+app.use('/student', studentRoute)
+app.use('/lecturer',lecturerRoute)
+app.use('/interpreter', interpreterRoute)
+app.use('/', indexRoute)
+//App Home
 
-app.use((req,res)=>{
-    res.status(404).render('404');
-});
