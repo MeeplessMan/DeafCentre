@@ -194,11 +194,11 @@ async function createLecturerUser(user, password){
 
 //TABLES students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-async function getLecturer(){
+async function getLecturers(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM lecturers`);
-    return rows[0];
+    return rows;
 }
 
 async function getLecturer(num){
@@ -216,6 +216,5 @@ async function createLecuter(num, fname, lname, dep, pnum, email){
        VALUES(?,?,?,?,?,?)`,[num, fname, lname, dep, pnum, email]);
 }
 
-await createInt(225921245,'John','Doe','0623654683',0,'225921245@dut4life.ac.za');
 console.log(await getInts());
 pool.end();
