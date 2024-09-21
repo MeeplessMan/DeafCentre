@@ -25,14 +25,29 @@ To check if the policy has been changed you can type the command: `Get-Execution
 
 - To close the server in vscode you need to need to click back on the terminal and use the keyboard shortcut `ctrl+C` on your keyboard to close the server
 
+## Database
+
+- The database we are using for the project is MySQL. To make the database in your own MySQL server you will need to synchronize the EER diagram in your  MySQL workbench through reverse engineering.(The EER diagram will be uploaded)
+
+- The database(deafcentre) so far is made up of 6 tables:
+    - interpreters
+    - interpreters_users
+    - lecturers
+    - lecturers_users
+    - students
+    - students_users
+
+- Dummy data has bee made for all the user tables. Run the database.js file in terminal(`node database`) and this will add all the rows to the tables. This is so that you are able to test the bascic functionallity of the website for login and credentials authentication.
+
 ## Dependacies
 
 - The packages currently installed are:
 
 ```javascript
-"ejs": "^3.1.10",
-"express": "^4.21.0",
-"lodash": "^4.17.21",
-"morgan": "^1.10.0",
-"mysql2": "^3.11.2"
+    "bcrypt": "^5.1.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.11.2"
 ```
