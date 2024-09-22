@@ -67,10 +67,11 @@ export async function getInts(){
     return rows;
 }
 
-export async function getInt(){
+export async function getInt(user){
     const [rows] = await pool.query(`
         SELECT * 
-        FROM interpreters`);
+        FROM interpreters
+        WHERE user_email = ?`,[user]);
     return rows[0];
 }
 
@@ -130,15 +131,15 @@ export async function getStudents(){
     const [rows] = await pool.query(`
         SELECT * 
         FROM students`);
-    return rows[0];
+    return rows;
 }
 
-export async function getStudent(num){
+export async function getStudent(user){
     const [rows] = await pool.query(`
         SELECT *
         FROM students
-        WHERE student_num = ? 
-        `,[num]);
+        WHERE user_email = ? 
+        `,[user]);
     return rows[0];
 }
 
@@ -201,12 +202,12 @@ export async function getLecturers(){
     return rows;
 }
 
-export async function getLecturer(num){
+export async function getLecturer(user){
     const [rows] = await pool.query(`
         SELECT *
         FROM lecturers
-        WHERE lecturer_num = ? 
-        `,[num]);
+        WHERE user_email = ? 
+        `,[user]);
     return rows[0];
 }
 
@@ -219,10 +220,9 @@ export async function createLecturer(num, fname, lname, dep, pnum, email){
 await createLecturerUser('atesh@gmail.com','Atesh1');
 await createLecturerUser('prevani@gmail.com','Atesh2');
 await createLecturerUser('avishendran@gmail.com','Atesh3');
-await createStudentUser('22382901@dut4life.ac.za','Atesh4');
+await createStudentUser('22382901@dut4life.ac.za','Atesh1');
 await createStudentUser('22581901@dut4life.ac.za','Atesh5');
 await createStudentUser('22583901@dut4life.ac.za','Atesh6');
 await createIntUser('225921245@dut4life.ac.za','Atesh1');
 await createIntUser('225921244@dut4life.ac.za','Atesh1');
 await createIntUser('22382901@dut4life.ac.za','Prevani');
-pool.end();

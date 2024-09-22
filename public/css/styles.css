@@ -29,10 +29,24 @@ body {
     transition: color 0.3s, transform 0.3s; /* Smooth transition for color and transform */
 }
 
+.nav-icon p{
+    color: #c1ff72;
+    font-size: 12px;
+    font-family: 'Tan Kindred', sans-serif;
+    transition: color 0.3s, transform 0.3s;
+}
+
 /* Right Icons Container */
 .nav-right-icons {
     display: flex; /* Align icons in a row */
     gap: 15px; /* Space between icons */
+}
+
+.nav-right-icons p{
+    color: #c1ff72;
+    font-size: 12px;
+    font-family: 'Tan Kindred', sans-serif;
+    transition: color 0.3s, transform 0.3s;
 }
 
 /* Right Icons Styling */
@@ -43,6 +57,8 @@ body {
 }
 
 /* Hover Effects */
+.nav-icon p:hover,
+.nav-right-icons p:hover,
 .nav-icon i:hover,
 .nav-right-icons i:hover {
     color: #ffffff; /* Change color on hover */
@@ -73,4 +89,16 @@ body {
     color: #ffffff; /* Change to desired color */
     font-family: 'Tan Kindred', sans-serif; /* Change to desired font-family */
     margin: 0; /* Remove default margin */
+}
+
+.content p{
+    font-size: 1.5rem; /* Adjust font size as needed */
+    color: #ffffff; /* Change to desired color */
+    font-family: 'Tan Kindred', sans-serif; /* Change to desired font-family */
+    margin: 0; /* Remove default margin */
+}
+
+.message {
+    margin-top: 20px;
+    color: red;
 }

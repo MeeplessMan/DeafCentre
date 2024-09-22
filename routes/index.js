@@ -14,6 +14,7 @@ router.get('/login',(req, res)=>{
 router.get('/',(req,res)=>{
     res.status(200).render('Index/home');
 });
+
 router.use((req,res)=>{
     res.status(404).render('Index/404');
 });
