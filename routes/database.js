@@ -1,5 +1,7 @@
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt';
+import e from 'express';
+import { get } from 'lodash';
 
 const pool = mysql.createPool({
     host: 'localhost',
@@ -50,6 +52,11 @@ export async function setIntUserPass(user, newPass){
     await pool.query(`UPDATE interpreters_users 
         SET user_passwordhash = ?
         WHERE user_email = ?`,[hashedPassword,user]);
+}
+
+export async function getIntUserPass(user){
+    const [row] = await getIntUser(user);
+    return row.user_passwordhash;
 }
 
 //TABLE interpreters functions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -126,6 +133,11 @@ export async function createStudentUser(user, password){
         `, [user,hashedPassword]);
 }
 
+export async function getStudentUserPass(user){
+    const [row] = getStudentUser(user);
+    return row.user_passwordhash;
+}
+
 //TABLE students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 export async function getStudents(){
     const [rows] = await pool.query(`
@@ -191,6 +203,11 @@ export async function createLecturerUser(user, password){
         INSERT IGNORE INTO lecturers_users (user_email, user_passwordhash)
         VALUES(?,?)
         `, [user,hashedPassword]);
+}
+
+export async function getLecturerUserPass(user){
+    const [row] = getLecturerUser(user);
+    return row.user_passwordhash;
 }
 
 //TABLES students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
