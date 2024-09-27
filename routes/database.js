@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'MeepPipe211004',
+    password: '@Peaches19Cupcake12',
     database: 'deafcentre'
 }).promise();
 
@@ -153,11 +153,40 @@ export async function getStudent(user){
     return rows[0];
 }
 
-export async function createStudent(num, fname, lname, pnum, email){
+export async function createStudent(num, fname, lname, pnum, email, hearing, year, cc){
     await pool.query(`
-       INSERT IGNORE INTO students(student_num, student_firstname, student_lastname, student_phonenum, user_email)
-       VALUES(?,?,?,?,?,?)`,[num, fname, lname, pnum, email]);
+       INSERT IGNORE INTO students(student_num, student_firstname, student_lastname, student_phonenum, user_email, student_hearinglevel, student_year, student_coursecode)
+       VALUES(?,?,?,?,?,?)`,[num, fname, lname, pnum, email, hearing, year, cc]);
 }
+//
+const updateQuery = `
+  UPDATE students
+  SET student_firstname = ?, student_lastname = ?
+  WHERE student_num = ?;
+`;
+
+export async function updateStudent(updateData) {
+  try {
+    await pool.query(updateQuery, updateData);
+    console.log('Student updated successfully!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+const deleteQuery = `
+  DELETE FROM students WHERE user_email= ?;
+`;
+
+export async function deleteStudent(user) {
+  try {
+    await pool.query(deleteQuery, [user]);
+    console.log('Student deleted successfully!');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
 
 //TABLE lecturers>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
