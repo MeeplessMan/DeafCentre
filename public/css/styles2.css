@@ -1,0 +1,423 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #004080;
+    color: white;
+    padding: 10px 0;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+header img {
+    height: 50px;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #004080;
+}
+
+p {
+    text-align: center;
+    color: #666;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Hero Section */
+.hero {
+    background-color: #004080;
+    color: white;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.cta-buttons {
+    margin-top: 20px;
+}
+
+.cta-buttons .btn {
+    padding: 15px 30px;
+    margin: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.primary {
+    background-color: #ff9900;
+}
+
+.secondary {
+    background-color: #339966;
+}
+
+.tertiary {
+    background-color: #cc3300;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+/* Features Section */
+.features {
+    margin: 50px 0;
+    text-align: center;
+}
+
+.feature-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.feature-item {
+    background-color: white;
+    padding: 20px;
+    width: 30%;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.feature-item img {
+    max-width: 100px;
+    margin-bottom: 20px;
+}
+
+/* Steps Section */
+.steps {
+    background-color: #e6e6e6;
+    padding: 50px 0;
+    text-align: center;
+}
+
+.steps-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.step-item {
+    width: 30%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.step-number {
+    display: inline-block;
+    font-size: 30px;
+    background-color: #004080;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+/* Footer */
+footer {
+    clear: both;
+    background-color: #004080;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-links a {
+    margin-left: 20px;
+    color: white;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Icon Placeholder Fix */
+.feature-item img {
+    display: inline-block;
+    width: 64px;
+    height: auto;
+    object-fit: contain;
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Login and Booking Page Styles */
+form {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 50px auto;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="submit"],
+input[type="radio"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+input[type="submit"] {
+    background-color: #004080;
+    color: white;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #003366;
+}
+
+/* Lecturer Access Page */
+.lecturer-container {
+    margin: 50px auto;
+    max-width: 1000px;
+}
+
+.lecturer-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.lecturer-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.lecturer-card h3 {
+    color: #004080;
+}
+
+.lecturer-card p {
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .feature-grid, .steps-grid {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .feature-item, .step-item {
+        width: 90%;
+        margin: auto;
+    }
+}
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #003366;
+    color: #fff;
+}
+
+header .logo img {
+    width: 150px;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.hero {
+    text-align: center;
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #012447;
+}
+
+.hero-image {
+    width: 40%; /* Adjust the percentage to control the image size */
+    height: auto;
+    max-width: 1000px; /* Make sure it doesn't get too large on bigger screens */
+    display: block;
+    margin: 0 auto; /* Center the image */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow effect */
+}
+
+@media (max-width: 768px) {
+    .hero-image {
+        width: 90%; /* On smaller screens, the image will be almost full-width */
+    }
+}
+
+
+.cta-buttons {
+    margin-top: 20px;
+}
+
+.cta-btn {
+    padding: 15px 30px;
+    background-color: #ff9900;
+    color: #fff;
+    text-decoration: none;
+    margin: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.cta-btn:hover {
+    background-color: #e68a00;
+}
+
+.what-we-offer {
+    padding: 50px 20px;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+.offer-cards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    width: 30%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    margin-top: 15px;
+}
+
+.card img {
+    width: 50px;
+}
+
+.about-us, .success-stories, .impact {
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.story {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+footer {
+    padding: 20px;
+    background-color: #003366;
+    color: #fff;
+    text-align: center;
+}
+
+.socials {
+    margin-top: 10px;
+}
+
+.socials a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+}

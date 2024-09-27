@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
-    password: '@Peaches19Cupcake12',
+    password: 'MeepPipe211004',
     database: 'deafcentre'
 }).promise();
 
