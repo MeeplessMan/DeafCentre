@@ -37,6 +37,9 @@ To check if the policy has been changed you can type the command: `Get-Execution
     - lecturers_users
     - students
     - students_users
+    - bookings
+    - accepted
+    - feedback
 
 - Dummy data has bee made for all the user tables. Run the database.js file in terminal(`node database`) and this will add all the rows to the tables. This is so that you are able to test the bascic functionallity of the website for login and credentials authentication.
 
