@@ -11,7 +11,8 @@ router.get('/login',(req, res)=>{
 router.post('/login', async (req, res)=>{
     const {user, password} = req.body;
     if(await data.valIntUser(user, password)){
-        req.session.user = { user, password};
+        password = await data.getIntUserPass(user);
+        req.session.user = {user, password};
         const interpreter = await data.getInt(user, password);
         res.status(200).render('Interpreter/home',{interpreter, user: req.session.user});
     }else{
@@ -21,11 +22,20 @@ router.post('/login', async (req, res)=>{
 
 router.get('/home', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.valIntUser(user.user, user.password)){
+    if(user == null||!await data.hashValIntUseralIntUser(user.user, user.password)){
         return res.status(200).redirect('/interpreter/login');
     }
     const interpreter = await data.getInt(user.user);
     res.status(200).render('Interpreter/home', {interpreter, user});
+});
+
+router.get('/acceptBooking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValIntUser(user.user, user.password)){
+        return res.status(200).redirect('/interpreter/login');
+    }
+    const interpreter = await data.getInt(user.user);
+    res.status(200).render('Interpreter/acceptBooking', {interpreter, user});
 });
 
 router.get('/home1',(req, res)=>{

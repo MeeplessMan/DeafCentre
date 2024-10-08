@@ -10,8 +10,8 @@ router.get('/login',(req, res)=>{
 router.post('/login', async (req, res)=>{
     const {user, password} = req.body;
     if(await data.valLecturerUser(user, password)){
+        password = await data.getLecturerUserPass(user);
         req.session.user = {user, password};
-        console.log(req.session.user);
         const lecturer = await data.getLecturer(user);
         res.status(200).render('Lecturer/home',{lecturer, user: req.session.user});
     }else{
@@ -21,11 +21,20 @@ router.post('/login', async (req, res)=>{
 
 router.get('/home', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.valLecturerUser(user.user, user.password)){
+    if(user == null||!await data.hashValLecturerUser(user.user, user.password)){
         return res.status(200).redirect('/lecturer/login');
     }
     const lecturer = await data.getLecturer(user.user);
     res.status(200).render('Lecturer/home', {lecturer, user});
+});
+
+router.get('/newBooking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValLecturerUser(user.user, user.password)){
+        return res.status(200).redirect('/lecturer/login');
+    }
+    const lecturer = await data.getLecturer(user.user);
+    res.status(200).render('Lecturer/acceptBooking', {lecturer, user});
 });
 
 router.get('/home1',(req, res)=>{
@@ -39,4 +48,5 @@ router.get('/about',(req, res)=>{
 router.get('/login1',(req, res)=>{
     res.status(200).redirect('/login');
 });
+
 export default router;

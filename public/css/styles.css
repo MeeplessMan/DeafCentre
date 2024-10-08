@@ -102,3 +102,15 @@ body {
     margin-top: 20px;
     color: red;
 }
+
+img{
+    height: 50px;
+    border-radius: 50%;
+}
+
+a{
+    font-size: 20px;
+    font-family: 'Tan Kindred', sans-serif;
+    color: #ffffff;
+    text-align: center;
+}

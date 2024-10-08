@@ -10,6 +10,7 @@ router.get('/login',(req, res)=>{
 router.post('/login', async (req, res)=>{
     const {user, password} = req.body;
     if(await data.valStudentUser(user, password)){
+        password = await data.getStudentUserPass(user);
         req.session.user = {user, password};
         const student = await data.getStudent(user);
         res.status(200).render('Student/home',{student, user: req.session.user});
@@ -20,11 +21,20 @@ router.post('/login', async (req, res)=>{
 
 router.get('/home', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.valStudentUser(user.user, user.password)){
+    if(user == null||!await data.hashValStudentUser(user.user, user.password)){
         return res.status(200).redirect('/student/login');
     }
     const student = await data.getStudent(user.user);
     res.status(200).render('Student/home', {student, user});
+})
+
+router.get('/newBooking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValStudentUser(user.user, user.password)){
+        return res.status(200).redirect('/student/login');
+    }
+    const student = await data.getStudent(user.user);
+    res.status(200).render('Student/newBooking', {student, user});
 })
 
 router.get('/home1',(req, res)=>{
