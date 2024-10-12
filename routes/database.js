@@ -20,7 +20,7 @@ export async function getIntUsers(){
 export async function valIntUser(user, password){
     const row = await getIntUser(user);
     if(row == null){return false}
-    return await getHashedPassword(password)==row.user_passwordhash;
+    return await bcrypt.compare(password,row.user_passwordhash);
 }
 
 export async function hashValIntUser(user, password){
@@ -53,7 +53,7 @@ export async function setIntUserPass(user, newPass){
 }
 
 export async function getIntUserPass(user){
-    const [row] = await getIntUser(user);
+    const row = await getIntUser(user);
     return row.user_passwordhash;
 }
 
@@ -97,7 +97,7 @@ export async function getIntID(user){
 export async function valStudentUser(user, password){
     const row = await getStudentUser(user)
     if(row==null){return false}
-    return await getHashedPassword(password)==row.user_passwordhash;
+    return await bcrypt.compare(password,row.user_passwordhash);
 }
 
 export async function hashValStudentUser(user, password){
@@ -137,7 +137,7 @@ export async function createStudentUser(user, password){
 }
 
 export async function getStudentUserPass(user){
-    const [row] = await getStudentUser(user);
+    const row = await getStudentUser(user);
     return row.user_passwordhash;
 }
 
@@ -161,7 +161,7 @@ export async function getStudent(user){
 export async function createStudent(num, fname, lname, pnum, email, hearing, year, cc){
     await pool.query(`
        INSERT IGNORE INTO students(student_num, student_firstname, student_lastname, student_phonenum, user_email, student_hearinglevel, student_year, student_coursecode)
-       VALUES(?,?,?,?,?,?)`,[num, fname, lname, pnum, email, hearing, year, cc]);
+       VALUES(?,?,?,?,?,?,?,?)`,[num, fname, lname, pnum, email, hearing, year, cc]);
 }
 //
 const updateQuery = `
@@ -189,7 +189,7 @@ export async function getStudentID(user){
 export async function valLecturerUser(user, password){
     const row = await getLecturerUser(user)
     if(row==null){return false}
-    return  await getHashedPassword(password)== row.user_passwordhash;
+    return  await bcrypt.compare(password,row.user_passwordhash);
 }
 
 export async function hashValLecturerUser(user, password){
@@ -229,7 +229,7 @@ export async function createLecturerUser(user, password){
 }
 
 export async function getLecturerUserPass(user){
-    const [row] = getLecturerUser(user);
+    const row = getLecturerUser(user);
     return row.user_passwordhash;
 }
 
@@ -375,12 +375,23 @@ export async function getHashedPassword(pass){
     return password;
 }
 
-await createLecturerUser('atesh@gmail.com','Atesh1');
-await createLecturerUser('prevani@gmail.com','Atesh2');
-await createLecturerUser('avishendran@gmail.com','Atesh3');
-await createStudentUser('22382901@dut4life.ac.za','Atesh1');
-await createStudentUser('22581901@dut4life.ac.za','Atesh5');
-await createStudentUser('22583901@dut4life.ac.za','Atesh6');
-await createIntUser('225921245@dut4life.ac.za','Atesh1');
-await createIntUser('225921244@dut4life.ac.za','Atesh1');
-await createIntUser('22382901@dut4life.ac.za','Prevani');
+await createLecturerUser('alice.smith@example.com', 'Alice123!');
+await createLecturerUser('bob.jones@example.com', 'Bob123!');
+await createLecturerUser('carol.white@example.com', 'Carol123!');
+await createStudentUser('dave.brown@example.com', 'Dave123!');
+await createStudentUser('eve.d@example.com', 'Eve123!');
+await createStudentUser('frank.miller@example.com', 'Frank123!');
+await createIntUser('grace.wilson@example.com', 'Grace123!');
+await createIntUser('henry.moore@example.com', 'Henry123!');
+await createIntUser('irene.taylor@example.com', 'Irene123!');
+await createIntUser('jack.anderson@example.com', 'Jack123!');
+await createStudent(1, 'Dave', 'Brown', '1234567890', 'dave.brown@example.com', 'Normal', 2023, 'CS101');
+await createStudent(2, 'Eve', 'Davis', '0987654321', 'eve.d@example.com', 'Moderate', 2023, 'CS102');
+await createStudent(3, 'Frank', 'Miller', '1122334455', 'frank.miller@example.com', 'Severe', 2023, 'CS103');
+await createInt(1, 'Grace', 'Wilson', '1234567890', 'Active', 'grace.wilson@example.com');
+await createInt(2, 'Henry', 'Moore', '0987654321', 'Active', 'henry.moore@example.com');
+await createInt(3, 'Irene', 'Taylor', '1122334455', 'Active', 'irene.taylor@example.com');
+await createInt(4, 'Jack', 'Anderson', '5566778899', 'Active', 'jack.anderson@example.com');
+await createLecturer(1, 'Alice', 'Smith', 'Computer Science', '1234567890', 'alice.smith@example.com');
+await createLecturer(2, 'Bob', 'Jones', 'Mathematics', '0987654321', 'bob.jones@example.com');
+await createLecturer(3, 'Carol', 'White', 'Physics', '1122334455', 'carol.white@example.com');

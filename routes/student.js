@@ -8,7 +8,7 @@ router.get('/login',(req, res)=>{
 });
 
 router.post('/login', async (req, res)=>{
-    const {user, password} = req.body;
+    var {user, password} = req.body;
     if(await data.valStudentUser(user, password)){
         password = await data.getStudentUserPass(user);
         req.session.user = {user, password};
