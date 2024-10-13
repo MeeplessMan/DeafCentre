@@ -164,20 +164,6 @@ export async function createStudent(num, fname, lname, pnum, email, hearing, yea
        VALUES(?,?,?,?,?,?,?,?)`,[num, fname, lname, pnum, email, hearing, year, cc]);
 }
 //
-const updateQuery = `
-  UPDATE students
-  SET student_firstname = ?, student_lastname = ?
-  WHERE student_num = ?;
-`;
-
-export async function updateStudent(updateData) {
-  try {
-    await pool.query(updateQuery, updateData);
-    console.log('Student updated successfully!');
-  } catch (err) {
-    console.error(err);
-  }
-}
 
 export async function getStudentID(user){
     const row = await getStudent(user);
@@ -291,16 +277,17 @@ export async function getLecturerBooking(num){
 
 export async function createStudentBooking(num, type, date, start, end, loc, details){
     await pool.query(`
-       INSERT IGNORE INTO bookings(student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details)
-       VALUES(?,?,?,?,?,?,?)`,[num, type, date, start, end, loc, details]);
+       INSERT IGNORE INTO bookings(student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
+       VALUES(?,?,?,?,?,?,?,?)`,[num, type, date, start, end, loc, details, today()]);
+    return true;
 }
 
-export async function createLecturerBooking(num, type, start, end, loc, details){
-
-
+export async function createLecturerBooking(num, type, date, start, end, loc, details){
+    checkBookings(date, start, end, loc);
     await pool.query(`
-       INSERT IGNORE INTO bookings(lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details)
-       VALUES(?,?,?,?,?,?,?)`,[num, type, today(), start, end, loc, details]);
+       INSERT IGNORE INTO bookings(lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
+       VALUES(?,?,?,?,?,?,?)`,[num, type, date, start, end, loc, details, today()]);
+    return true;
 }
 
 export async function deleteBooking(id){
@@ -350,12 +337,83 @@ export async function getSingleAccepted(int, booking){
 
 export async function getConfirmedBookingsLecturer(num){
     const [rows] = await pool.query(`
-        SELECT accepted.*, bookings.*
+        SELECT bookings.*
         FROM accepted
         JOIN bookings ON accepted.booking_id = bookings.booking_id
         WHERE bookings.lecturer_num = ?`,[num]);
     return rows;
 }
+
+export async function getConfirmedBookingsStudent(num){
+    const [rows] = await pool.query(`
+        SELECT accepted.*, bookings.*
+        FROM accepted
+        JOIN bookings ON accepted.booking_id = bookings.booking_id
+        WHERE bookings.student_num = ?`,[num]);
+    return rows;
+}
+
+export async function deleteAccepted(id){
+    await pool.query(`
+        DELETE FROM accepted
+        WHERE accepted_id = ?`,[id]);
+}
+
+//Extra SQL queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+export async function updateStudent(updateData) {
+    await pool.query(`
+        UPDATE students
+        SET student_firstname = ?, student_lastname = ?, student_phonenum = ?, student_hearinglevel = ?, student_year = ?, student_coursecode = ?
+        WHERE student_num = ?`,[updateData.fname, updateData.lname, updateData.pnum, updateData.hearing, updateData.year, updateData.cc, updateData.num]);
+}
+
+export async function updateInt(updateData) {
+    await pool.query(`
+        UPDATE interpreters
+        SET interpreter_firstname = ?, interpreter_lastname = ?, interpreter_phonenum = ?, interpreter_status = ?
+        WHERE interpreter_id = ?`,[updateData.fname, updateData.lname, updateData.pnum, updateData.status, updateData.id]);
+}
+
+export async function updateLecturer(updateData) {
+    await pool.query(`
+        UPDATE lecturers
+        SET lecturer_firstname = ?, lecturer_lastname = ?, lecturer_department = ?, lecturer_phonenum = ?
+        WHERE lecturer_num = ?`,[updateData.fname, updateData.lname, updateData.dep, updateData.pnum, updateData.num]);
+}
+
+export async function updateBooking(updateData) {
+    await pool.query(`
+        UPDATE bookings
+        SET booking_type = ?, booking_date = ?, booking_start = ?, booking_end = ?, booking_location = ?, booking_details = ?
+        WHERE booking_id = ?`,[updateData.type, updateData.date, updateData.start, updateData.end, updateData.loc, updateData.details, updateData.id]);
+}
+
+export async function updateAccepted(updateData) {
+    await pool.query(`
+        UPDATE accepted
+        SET interpreter_id = ?, booking_id = ?, accepted_date = ?
+        WHERE accepted_id = ?`,[updateData.intID, updateData.bookID, updateData.date, updateData.id]);
+}
+
+export async function updateStudentUser(updateData) {
+    await pool.query(`
+        UPDATE students_users
+        SET user_email = ?, user_passwordhash = ?
+        WHERE user_email = ?`,[updateData.email, updateData.password, updateData.oldEmail]);
+}
+
+export async function checkBookings(date, start, end, loc){
+    const [rows] = await pool.query(`
+        SELECT *
+        FROM bookings
+        WHERE booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`,[date, start, end, loc]);
+    if(rows.length>0){
+        return true;
+    }
+    return false
+}
+
 //Extra functions >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 export async function today(){
@@ -395,3 +453,10 @@ await createInt(4, 'Jack', 'Anderson', '5566778899', 'Active', 'jack.anderson@ex
 await createLecturer(1, 'Alice', 'Smith', 'Computer Science', '1234567890', 'alice.smith@example.com');
 await createLecturer(2, 'Bob', 'Jones', 'Mathematics', '0987654321', 'bob.jones@example.com');
 await createLecturer(3, 'Carol', 'White', 'Physics', '1122334455', 'carol.white@example.com');
+await createStudentBooking(1, 'Lecture', '2024/10/12', '10:00:00', '12:00:00', 'Room 1', 'Introduction to Computer Science');
+await createStudentBooking(2, 'Tutorial', '2024/10/12', '14:00:00', '16:00:00', 'Room 2', 'Introduction to Computer Science');
+await createStudentBooking(3, 'Lecture', '2024/10/13', '10:00:00', '12:00:00', 'Room 1', 'Introduction to Mathematics');
+await createStudentBooking(1, 'Tutorial', '2024/10/13', '14:00:00', '16:00:00', 'Room 2', 'Introduction to Mathematics');
+await createLecturerBooking(1, 'Lecture', '2024/10/12', '10:00:00', '12:00:00', 'Room 4', 'Introduction to Computer Science');
+await createLecturerBooking(2, 'Tutorial', '2024/10/12', '14:00:00', '16:00:00', 'Room 3', 'Introduction to Computer Science');
+await createLecutrerBooking(3, 'Lecture', '2024/10/13', '10:00:00', '12:00:00', 'Room 4', 'Introduction to Mathematics');

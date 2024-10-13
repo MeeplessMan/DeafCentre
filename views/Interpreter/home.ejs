@@ -5,8 +5,11 @@
         <!-- Navigation Bar -->
         <%- include('./partials/intNav.ejs')%>
         <div class = "content">
-            <h1>Interpreter Home</h1>
-            <p>Welcome to the interpreter home page</p>
+            <img src = "/images/profilePic/pic.png" alt = "Interpreter"></i>
+            <h1>Welcome <%= interpreter.interpreter_firstname%></h1>
+            <p>Full Name: <%= interpreter.interpreter_firstname%> <%= interpreter.interpreter_lastname%></p>
+            <p>Email: <%= interpreter.user_email%></p>
+            <p>Phone Number: <%= interpreter.interpreter_phonenum%></p>
         </div>
         <!-- JavaScript file links -->
         <script src="js/scripts.js"></script>

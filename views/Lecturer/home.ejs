@@ -5,8 +5,11 @@
         <!-- Navigation Bar -->
         <%- include('./partials/lecNav.ejs')%>
         <div class = "content">
-            <h1>Lecturer Home</h1>
-            <p>Welcome <%= user.user %>to the lecturer home page</p>
+            <img src = "/images/profilePic/pic.png" alt = "Lecturer"></i>
+            <h1>Welcome, <%= lecturer.lecturer_firstname %></h1>
+            <p>Full Name: <%= lecturer.lecturer_firstname%> <%= lecturer.lecturer_lastname%></p>
+            <p>Email: <%= lecturer.user_email%></p>
+            <p>Phone Number: <%= lecturer.lecturer_phonenum%></p>
         </div>
         <!-- JavaScript file links -->
         <script src="js/scripts.js"></script>
