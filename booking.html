@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Page</title>
+    <link rel="stylesheet" href="C:\Users\User\OneDrive\Documents\Lecturer\css\BKstyle.css">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
+</head>
+<body>
+    <nav>
+        <div class="profile-pic">
+            <img src="C:\Users\User\OneDrive\Documents\Lecturer\images\test.jpg" alt="Profile Picture">
+        </div>
+        <ul>
+            <li><a href="homepage.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="book-interpreter.html">Book an Interpreter</a></li>
+        </ul>
+    </nav>
+    <div id="calendar-container">
+        <div id="calendar"></div>
+        <div id="sidebar">
+            <div class="booking-type">
+                <label for="booking-type">Booking Type:</label>
+                <select id="booking-type">
+                    <option value="lecturer">Lecturer</option>
+                    <option value="student">Student</option>
+                </select>
+            </div>
+            <div class="location">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location">
+            </div>
+            <div class="additional-info">
+                <label for="additional-info">Additional Information:</label>
+                <textarea id="additional-info" name="additional-info"></textarea>
+            </div>
+            <div class="time-slot" data-time="09:00">09:00 - 10:00</div>
+            <div class="time-slot" data-time="10:00">10:00 - 11:00</div>
+            <div class="time-slot" data-time="11:00">11:00 - 12:00</div>
+            <div class="time-slot" data-time="13:00">13:00 - 14:00</div>
+            <div class="time-slot" data-time="14:00">14:00 - 15:00</div>
+            <div class="time-slot" data-time="15:00">15:00 - 16:00</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var sidebar = document.getElementById('sidebar');
+            var selectedDate = null;
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                selectable: true,
+                headerToolbar: {
+                    left: 'prev,next',
+                    center: 'title',
+                    right: '' // Remove week and day view options
+                },
+                dateClick: function(info) {
+                    var day = new Date(info.dateStr).getDay();
+                    if (day !== 0 && day !== 6) { // Check if the selected day is not a weekend
+                        sidebar.style.display = 'block'; // Show the sidebar when a date is selected
+                        selectedDate = info.dateStr;
+                    }
+                },
+                selectAllow: function(selectInfo) {
+                    var day = selectInfo.start.getDay();
+                    // Prevent selection on weekends (Saturday = 6, Sunday = 0)
+                    return day !== 0 && day !== 6;
+                }
+            });
+            calendar.render();
+
+            document.querySelectorAll('.time-slot').forEach(function(slot) {
+                slot.addEventListener('click', function() {
+                    var selectedTime = this.getAttribute('data-time');
+                    var bookingType = document.getElementById('booking-type').value;
+                    var location = document.getElementById('location').value;
+                    var additionalInfo = document.getElementById('additional-info').value;
+                    if (selectedDate) {
+                        // Redirect to confirmation page
+                        window.location.href = `confirmation.html?date=${selectedDate}&time=${selectedTime}&type=${bookingType}&location=${location}&info=${additionalInfo}`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

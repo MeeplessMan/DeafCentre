@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Booking</title>
+   
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Confirm Your Booking</h1>
+        <div id="booking-details">
+            <p><strong>Date:</strong> <span id="booking-date"></span></p>
+            <p><strong>Time:</strong> <span id="booking-time"></span></p>
+            <p><strong>Type:</strong> <span id="booking-type"></span></p>
+            <p><strong>Location:</strong> <span id="booking-location"></span></p>
+            <p><strong>Additional Information:</strong> <span id="booking-info"></span></p>
+        </div>
+        <a href="#" id="confirm-booking" class="button">Confirm Booking</a>
+        <a href="#" id="edit-booking" class="button">Edit Booking</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const date = urlParams.get('date');
+            const time = urlParams.get('time');
+            const type = urlParams.get('type');
+            const location = urlParams.get('location');
+            const info = urlParams.get('info');
+
+            console.log('Booking Details:', { date, time, type, location, info });
+
+            document.getElementById('booking-date').textContent = date;
+            document.getElementById('booking-time').textContent = time;
+            document.getElementById('booking-type').textContent = type;
+            document.getElementById('booking-location').textContent = location;
+            document.getElementById('booking-info').textContent = info;
+
+            document.getElementById('confirm-booking').addEventListener('click', function() {
+                console.log('Confirming booking...');
+                // Send POST request to the server
+                fetch('https://your-server-endpoint.com/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        date: date,
+                        time: time,
+                        type: type,
+                        location: location,
+                        additionalInfo: info
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Booking confirmed:', data);
+                    alert('Booking confirmed!');
+                    // Redirect or update the UI as needed
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error confirming your booking.');
+                });
+            });
+
+            document.getElementById('edit-booking').addEventListener('click', function() {
+                window.history.back();
+            });
+        });
+    </script>
+</body>
+</html>
+
