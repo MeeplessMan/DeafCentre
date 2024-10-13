@@ -5,8 +5,11 @@
         <!-- Navigation Bar -->
         <%- include('./partials/studNav.ejs')%>
         <div class = "content">
-            <h1>Student Home</h1>
-            <p>Welcome to the student home page</p>
+            <img src = "/images/profilePic/pic.png" alt = "Student"></i>
+            <h1>Welcome, <%= student.student_firstname %></h1>
+            <p>Full Name: <%= student.student_firstname%> <%= student.student_lastname%></p>
+            <p>Email: <%= student.user_email%></p>
+            <p>Phone Number: <%= student.student_phonenum%></p>
         </div>
         <!-- JavaScript file links -->
         <script src="js/scripts.js"></script>
