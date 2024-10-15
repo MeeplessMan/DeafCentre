@@ -1,16 +1,91 @@
 <html lang="en">
-    <!--Head Tag-->
-    <%- include('./partials/head.ejs')%>
-    <body>
-        <!-- Navigation Bar -->
-        <%- include('./partials/studNav.ejs')%>
-        <div class = "content">
-            <img src = "/images/profilePic/pic.png" alt = "Student"></i>
-            <h1>Welcome, <%= student.student_firstname %></h1>
-            <p>Full Name: <%= student.student_firstname%> <%= student.student_lastname%></p>
-            <p>Email: <%= student.user_email%></p>
-            <p>Phone Number: <%= student.student_phonenum%></p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link rel="stylesheet" href="/css/styles3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img id="userIcon" src="/images/profilePic/pic.png" alt="User Icon" class="navbar-photo">
+                <input type="file" id="uploadPhoto" accept="image/*">
+            </div>
+            <ul>
+                <li><a href="home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="profile"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="bookings"><i class="fas fa-calendar-alt"></i> My Bookings</a></li>
+                <li><a href="login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Welcome, Student!</h2>
+        <div class="dashboard">
+            <div class="profile">
+                <h3>Your Profile</h3>
+                <h4>Student Number: <%= student.student_num%></h4>
+                <h4><%= student.student_firstname%> <%= student.student_lastname%></h4>
+                <p>Email: <%= student.user_email%></p>
+                <button onclick="window.location.href='profile.html'">Edit Profile</button>
+            </div>
+
+            <div class="summary">
+                <h3>Summary</h3>
+                <p>Upcoming Lectures: <strong>3</strong></p>
+                <p>Total Bookings: <strong>10</strong></p>
+            </div>
+
+            <div class="notifications">
+                <h3>Notifications</h3>
+                <ul>
+                    <li>Lecture rescheduled for next week.</li>
+                    <li>New course available for booking.</li>
+                </ul>
+            </div>
+
+            <div class="booking-history">
+                <h3>My Bookings</h3>
+                <table id="dynamicTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Booking Type</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Location</th>
+                            <th>Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < bookings.length; i++){%>
+                            <tr>
+                                <td><%= bookings[i].booking_id %></td>
+                                <td><%= bookings[i].booking_type %></td>
+                                <td><%= bookings[i].booking_date %></td>
+                                <td><%= bookings[i].booking_start %></td>
+                                <td><%= bookings[i].booking_end %></td>
+                                <td><%= bookings[i].booking_location %></td>
+                                <td><%= bookings[i].booking_details %></td>
+                                <td><form action = "booking" method = "post">
+                                    <input type = "hidden" name = "id" value = "<%= bookings[i].booking_id %>">
+                                    <button type = "submit">View</button>
+                                </form></td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <!-- JavaScript file links -->
-        <script src="js/scripts.js"></script>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Student Portal</p>
+    </footer>
+</body>
 </html>
