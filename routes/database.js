@@ -10,433 +10,716 @@ const pool = mysql.createPool({
 
 //TABLE interpreters_users functions?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function getIntUsers(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM interpreters_users`);
-    return rows;
+export async function getIntUsers() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM interpreters_users`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getIntUsers:', error);
+        throw error;
+    }
 }
 
-export async function valIntUser(user, password){
-    const row = await getIntUser(user);
-    if(row == null){return false}
-    return await bcrypt.compare(password,row.user_passwordhash);
+export async function valIntUser(user, password) {
+    try {
+        const row = await getIntUser(user);
+        if (row == null) { return false; }
+        return await bcrypt.compare(password, row.user_passwordhash);
+    } catch (error) {
+        console.error('Error in valIntUser:', error);
+        throw error;
+    }
 }
 
-export async function hashValIntUser(user, password){
-    const row = await getIntUser(user)
-    if(row == null){return false}
-    return password==row.user_passwordhash;
+export async function hashValIntUser(user, password) {
+    try {
+        const row = await getIntUser(user);
+        if (row == null) { return false; }
+        return password == row.user_passwordhash;
+    } catch (error) {
+        console.error('Error in hashValIntUser:', error);
+        throw error;
+    }
 }
 
-export async function createIntUser(user, password){
-    const hashedPassword = await getHashedPassword(password);
-    await pool.query(`
-        INSERT IGNORE INTO interpreters_users (user_email, user_passwordhash)
-        VALUES(?,?)
-        `, [user,hashedPassword]);
+export async function createIntUser(user, password) {
+    try {
+        const hashedPassword = await getHashedPassword(password);
+        await pool.query(`
+            INSERT IGNORE INTO interpreters_users (user_email, user_passwordhash)
+            VALUES(?,?)
+            `, [user, hashedPassword]);
+    } catch (error) {
+        console.error('Error in createIntUser:', error);
+        throw error;
+    }
 }
 
-export async function getIntUser(user){
-    const [row] = await pool.query(`
-        SELECT * 
-        FROM interpreters_users 
-        WHERE user_email = ?`,[user]);
-    return row[0];
+export async function getIntUser(user) {
+    try {
+        const [row] = await pool.query(`
+            SELECT * 
+            FROM interpreters_users 
+            WHERE user_email = ?`, [user]);
+        return row[0];
+    } catch (error) {
+        console.error('Error in getIntUser:', error);
+        throw error;
+    }
 }
 
-export async function setIntUserPass(user, newPass){
-    const hashedPassword = await getHashedPassword(newPass);
-    await pool.query(`UPDATE interpreters_users 
-        SET user_passwordhash = ?
-        WHERE user_email = ?`,[hashedPassword,user]);
+export async function setIntUserPass(user, newPass) {
+    try {
+        const hashedPassword = await getHashedPassword(newPass);
+        await pool.query(`UPDATE interpreters_users 
+            SET user_passwordhash = ?
+            WHERE user_email = ?`, [hashedPassword, user]);
+    } catch (error) {
+        console.error('Error in setIntUserPass:', error);
+        throw error;
+    }
 }
 
-export async function getIntUserPass(user){
-    const row = await getIntUser(user);
-    return row.user_passwordhash;
+export async function getIntUserPass(user) {
+    try {
+        const row = await getIntUser(user);
+        return row.user_passwordhash;
+    } catch (error) {
+        console.error('Error in getIntUserPass:', error);
+        throw error;
+    }
 }
 
 //TABLE interpreters functions>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function createInt(id,fname,lname,pnum,status,email){
-     await pool.query(`
-        INSERT IGNORE INTO interpreters(interpreter_id, interpreter_firstname, interpreter_lastname, interpreter_phonenum, interpreter_status, user_email)
-        VALUES(?,?,?,?,?,?)`,[id,fname,lname,pnum,status,email]);
+export async function createInt(id, fname, lname, pnum, status, email) {
+    try {
+        await pool.query(`
+            INSERT IGNORE INTO interpreters(interpreter_id, interpreter_firstname, interpreter_lastname, interpreter_phonenum, interpreter_status, user_email)
+            VALUES(?,?,?,?,?,?)`, [id, fname, lname, pnum, status, email]);
+    } catch (error) {
+        console.error('Error in createInt:', error);
+        throw error;
+    }
 }
 
-export async function getInts(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM interpreters`);
-    return rows;
+export async function getInts() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM interpreters`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getInts:', error);
+        throw error;
+    }
 }
 
-export async function getInt(user){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM interpreters
-        WHERE user_email = ?`,[user]);
-    return rows[0];
+export async function getInt(user) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM interpreters
+            WHERE user_email = ?`, [user]);
+        return rows[0];
+    } catch (error) {
+        console.error('Error in getInt:', error);
+        throw error;
+    }
 }
 
-export async function setIntStatus(id,val){
-    await pool.query(`
-        UPDATE interpreters
-        SET interpreters_status = ?
-        WHERE interpreters_id = id
-        `,[val,id]);
+export async function setIntStatus(id, val) {
+    try {
+        await pool.query(`
+            UPDATE interpreters
+            SET interpreters_status = ?
+            WHERE interpreters_id = id
+            `, [val, id]);
+    } catch (error) {
+        console.error('Error in setIntStatus:', error);
+        throw error;
+    }
 }
 
-export async function getIntID(user){
-    const row = getInt(user);
-    return row.interpreter_id;
+export async function getIntID(user) {
+    try {
+        const row = await getInt(user);
+        return row.interpreter_id;
+    } catch (error) {
+        console.error('Error in getIntID:', error);
+        throw error;
+    }
 }
 
 //TABLE students_users>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-export async function valStudentUser(user, password){
-    const row = await getStudentUser(user)
-    if(row==null){return false}
-    return await bcrypt.compare(password,row.user_passwordhash);
+export async function valStudentUser(user, password) {
+    try {
+        const row = await getStudentUser(user);
+        if (row == null) { return false; }
+        return await bcrypt.compare(password, row.user_passwordhash);
+    } catch (error) {
+        console.error('Error in valStudentUser:', error);
+        throw error;
+    }
 }
 
-export async function hashValStudentUser(user, password){
-    const row = await getStudentUser(user)
-    if(row==null){return falase}
-    return password==row.user_passwordhash;
+export async function hashValStudentUser(user, password) {
+    try {
+        const row = await getStudentUser(user);
+        if (row == null) { return false; }
+        return password == row.user_passwordhash;
+    } catch (error) {
+        console.error('Error in hashValStudentUser:', error);
+        throw error;
+    }
 }
 
-export async function setStudentUserPass(user, newPass){
-    const hashedPassword = await getHashedPassword(newPass);
-    await pool.query(`UPDATE students_users 
-        SET user_passwordhash = ?
-        WHERE user_email = ?`,[hashedPassword,user]);
+export async function setStudentUserPass(user, newPass) {
+    try {
+        const hashedPassword = await getHashedPassword(newPass);
+        await pool.query(`UPDATE students_users 
+            SET user_passwordhash = ?
+            WHERE user_email = ?`, [hashedPassword, user]);
+    } catch (error) {
+        console.error('Error in setStudentUserPass:', error);
+        throw error;
+    }
 }
 
-export async function getStudentUsers(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM students_users`);
-    return rows;
+export async function getStudentUsers() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM students_users`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getStudentUsers:', error);
+        throw error;
+    }
 }
 
-export async function getStudentUser(user){
-    const [row] = await pool.query(`
-        SELECT * 
-        FROM students_users 
-        WHERE user_email = ?`,[user]);
-    return row[0];
+export async function getStudentUser(user) {
+    try {
+        const [row] = await pool.query(`
+            SELECT * 
+            FROM students_users 
+            WHERE user_email = ?`, [user]);
+        return row[0];
+    } catch (error) {
+        console.error('Error in getStudentUser:', error);
+        throw error;
+    }
 }
 
-export async function createStudentUser(user, password){
-    const hashedPassword = await getHashedPassword(password);
-    await pool.query(`
-        INSERT IGNORE INTO students_users (user_email, user_passwordhash)
-        VALUES(?,?)
-        `, [user,hashedPassword]);
+export async function createStudentUser(user, password) {
+    try {
+        const hashedPassword = await getHashedPassword(password);
+        await pool.query(`
+            INSERT IGNORE INTO students_users (user_email, user_passwordhash)
+            VALUES(?,?)
+            `, [user, hashedPassword]);
+    } catch (error) {
+        console.error('Error in createStudentUser:', error);
+        throw error;
+    }
 }
 
-export async function getStudentUserPass(user){
-    const row = await getStudentUser(user);
-    return row.user_passwordhash;
+export async function getStudentUserPass(user) {
+    try {
+        const row = await getStudentUser(user);
+        return row.user_passwordhash;
+    } catch (error) {
+        console.error('Error in getStudentUserPass:', error);
+        throw error;
+    }
 }
 
 //TABLE students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-export async function getStudents(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM students`);
-    return rows;
+export async function getStudents() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM students`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getStudents:', error);
+        throw error;
+    }
 }
 
-export async function getStudent(user){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM students
-        WHERE user_email = ? 
-        `,[user]);
-    return rows[0];
+export async function getStudent(user) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM students
+            WHERE user_email = ? 
+            `, [user]);
+        return rows[0];
+    } catch (error) {
+        console.error('Error in getStudent:', error);
+        throw error;
+    }
 }
 
-export async function createStudent(num, fname, lname, pnum, email, hearing, year, cc){
-    await pool.query(`
-       INSERT IGNORE INTO students(student_num, student_firstname, student_lastname, student_phonenum, user_email, student_hearinglevel, student_year, student_coursecode)
-       VALUES(?,?,?,?,?,?,?,?)`,[num, fname, lname, pnum, email, hearing, year, cc]);
+export async function createStudent(num, fname, lname, pnum, email, hearing, year, cc) {
+    try {
+        await pool.query(`
+           INSERT IGNORE INTO students(student_num, student_firstname, student_lastname, student_phonenum, user_email, student_hearinglevel, student_year, student_coursecode)
+           VALUES(?,?,?,?,?,?,?,?)`, [num, fname, lname, pnum, email, hearing, year, cc]);
+    } catch (error) {
+        console.error('Error in createStudent:', error);
+        throw error;
+    }
 }
-//
 
-export async function getStudentID(user){
-    const row = await getStudent(user);
-    return row.student_num;
+export async function getStudentID(user) {
+    try {
+        const row = await getStudent(user);
+        return row.student_num;
+    } catch (error) {
+        console.error('Error in getStudentID:', error);
+        throw error;
+    }
 }
 
 //TABLE lecturers>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function valLecturerUser(user, password){
-    const row = await getLecturerUser(user)
-    if(row==null){return false}
-    return  await bcrypt.compare(password,row.user_passwordhash);
+export async function valLecturerUser(user, password) {
+    try {
+        const row = await getLecturerUser(user);
+        if (row == null) { return false; }
+        return await bcrypt.compare(password, row.user_passwordhash);
+    } catch (error) {
+        console.error('Error in valLecturerUser:', error);
+        throw error;
+    }
 }
 
-export async function hashValLecturerUser(user, password){
-    const row = await getLecturerUser(user)
-    if(row==null){return false}
-    return password==row.user_passwordhash;
+export async function hashValLecturerUser(user, password) {
+    try {
+        const row = await getLecturerUser(user);
+        if (row == null) { return false; }
+        return password == row.user_passwordhash;
+    } catch (error) {
+        console.error('Error in hashValLecturerUser:', error);
+        throw error;
+    }
 }
 
-export async function setLecturerUserPass(user, newPass){
-    const hashedPassword = await getHashedPassword(newPass);
-    await pool.query(`UPDATE students_users 
-        SET user_passwordhash = ?
-        WHERE user_email = ?`,[hashedPassword,user]);
+export async function setLecturerUserPass(user, newPass) {
+    try {
+        const hashedPassword = await getHashedPassword(newPass);
+        await pool.query(`UPDATE students_users 
+            SET user_passwordhash = ?
+            WHERE user_email = ?`, [hashedPassword, user]);
+    } catch (error) {
+        console.error('Error in setLecturerUserPass:', error);
+        throw error;
+    }
 }
 
-export async function getLecturerUsers(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM lecturers_users`);
-    return rows;
+export async function getLecturerUsers() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM lecturers_users`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getLecturerUsers:', error);
+        throw error;
+    }
 }
 
-export async function getLecturerUser(user){
-    const [row] = await pool.query(`
-        SELECT * 
-        FROM lecturers_users 
-        WHERE user_email = ?`,[user]);
-    return row[0];
+export async function getLecturerUser(user) {
+    try {
+        const [row] = await pool.query(`
+            SELECT * 
+            FROM lecturers_users 
+            WHERE user_email = ?`, [user]);
+        return row[0];
+    } catch (error) {
+        console.error('Error in getLecturerUser:', error);
+        throw error;
+    }
 }
 
-export async function createLecturerUser(user, password){
-    const hashedPassword =  await getHashedPassword(password);
-    await pool.query(`
-        INSERT IGNORE INTO lecturers_users (user_email, user_passwordhash)
-        VALUES(?,?)
-        `, [user,hashedPassword]);
+export async function createLecturerUser(user, password) {
+    try {
+        const hashedPassword = await getHashedPassword(password);
+        await pool.query(`
+            INSERT IGNORE INTO lecturers_users (user_email, user_passwordhash)
+            VALUES(?,?)
+            `, [user, hashedPassword]);
+    } catch (error) {
+        console.error('Error in createLecturerUser:', error);
+        throw error;
+    }
 }
 
-export async function getLecturerUserPass(user){
-    const row = getLecturerUser(user);
-    return row.user_passwordhash;
+export async function getLecturerUserPass(user) {
+    try {
+        const row = await getLecturerUser(user);
+        return row.user_passwordhash;
+    } catch (error) {
+        console.error('Error in getLecturerUserPass:', error);
+        throw error;
+    }
 }
 
 //TABLES students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function getLecturers(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM lecturers`);
-    return rows;
+export async function getLecturers() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM lecturers`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getLecturers:', error);
+        throw error;
+    }
 }
 
-export async function getLecturer(user){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM lecturers
-        WHERE user_email = ? 
-        `,[user]);
-    return rows[0];
+export async function getLecturer(user) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM lecturers
+            WHERE user_email = ? 
+            `, [user]);
+        return rows[0];
+    } catch (error) {
+        console.error('Error in getLecturer:', error);
+        throw error;
+    }
 }
 
-export async function createLecturer(num, fname, lname, dep, pnum, email){
-    await pool.query(`
-       INSERT IGNORE INTO lecturers(lecturer_num, lecturer_firstname, lecturer_lastname, lecturer_department, lecturer_phonenum, user_email)
-       VALUES(?,?,?,?,?,?)`,[num, fname, lname, dep, pnum, email]);
+export async function createLecturer(num, fname, lname, dep, pnum, email) {
+    try {
+        await pool.query(`
+           INSERT IGNORE INTO lecturers(lecturer_num, lecturer_firstname, lecturer_lastname, lecturer_department, lecturer_phonenum, user_email)
+           VALUES(?,?,?,?,?,?)`, [num, fname, lname, dep, pnum, email]);
+    } catch (error) {
+        console.error('Error in createLecturer:', error);
+        throw error;
+    }
 }
 
-export async function getLecturerID(user){
-    const row = await getLecturer(user);
-    return row.lecturer_num;
+export async function getLecturerID(user) {
+    try {
+        const row = await getLecturer(user);
+        return row.lecturer_num;
+    } catch (error) {
+        console.error('Error in getLecturerID:', error);
+        throw error;
+    }
 }
 
 //Table bookings >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function getBookings(){
-    const [rows] = await pool.query(`
-        SELECT * 
-        FROM bookings`);
-    return rows;
-}
-
-export async function getStudentBooking(num){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM bookings
-        WHERE student_num = ? 
-        `,[num]);
-    return rows;
-}
-
-export async function getLecturerBooking(num){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM bookings
-        WHERE lecturer_num = ? 
-        `,[num]);
-    return rows;
-}
-
-export async function checkBookingStudent(num, date, start, end, loc){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM bookings
-        WHERE student_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`,[num, date, start, end, loc]);
-    if(rows.length>0){
-        return false;
+export async function getBookings() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT * 
+            FROM bookings`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getBookings:', error);
+        throw error;
     }
-    return true;
 }
 
-export async function checkBookingLecturer(num, date, start, end , loc){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM bookings
-        WHERE lecturer_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`,[num, date, start, end, loc]);
-    if(rows.length>0){
-        return false;
+export async function getStudentBooking(num) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE student_num = ? 
+            `, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getStudentBooking:', error);
+        throw error;
     }
-    return true
 }
 
-export async function createStudentBooking(num, type, date, start, end, loc, details){
-    if(!await checkBookingStudent(num, date, start, end, loc)){return false}
-    const day  = await today();
-    await pool.query(`
-       INSERT IGNORE INTO bookings(student_num, lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
-       VALUES(?,?,?,?,?,?,?,?,?)`,[num, null, type, date, start, end, loc, details, day]);
-    return true;
+export async function getLecturerBooking(num) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE lecturer_num = ? 
+            `, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getLecturerBooking:', error);
+        throw error;
+    }
 }
 
-export async function createLecturerBooking(num, type, date, start, end, loc, details){
-    if(!await checkBookingLecturer(num, date, start, end, loc)){return false}
-    const day = await today();
-    await pool.query(`
-       INSERT IGNORE INTO bookings(lecturer_num, student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
-       VALUES(?,?,?,?,?,?,?,?,?)`,[num, null, type, date, start, end, loc, details, day]);
-    return true;
+export async function checkBookingStudent(num, date, start, end, loc) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE student_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`, [num, date, start, end, loc]);
+        if (rows.length > 0) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error in checkBookingStudent:', error);
+        throw error;
+    }
 }
 
-export async function deleteBooking(id){
-    await pool.query(`
-        DELETE FROM bookings
-        WHERE booking_id = ?`,[id]);
+export async function checkBookingLecturer(num, date, start, end, loc) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE lecturer_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`, [num, date, start, end, loc]);
+        if (rows.length > 0) {
+            return false;
+        }
+        return true;
+    } catch (error) {
+        console.error('Error in checkBookingLecturer:', error);
+        throw error;
+    }
 }
 
-export async function updateBookingDetails(id, details){
-    await pool.query(`
-        UPDATE bookings
-        SET booking_details = ?
-        WHERE booking_id = ?`,[details,id]);
+export async function createStudentBooking(num, type, date, start, end, loc, details) {
+    try {
+        if (!await checkBookingStudent(num, date, start, end, loc)) { return false; }
+        const day = await today();
+        await pool.query(`
+           INSERT IGNORE INTO bookings(student_num, lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
+           VALUES(?,?,?,?,?,?,?,?,?)`, [num, null, type, date, start, end, loc, details, day]);
+        return true;
+    } catch (error) {
+        console.error('Error in createStudentBooking:', error);
+        throw error;
+    }
+}
+
+export async function createLecturerBooking(num, type, date, start, end, loc, details) {
+    try {
+        if (!await checkBookingLecturer(num, date, start, end, loc)) { return false; }
+        const day = await today();
+        await pool.query(`
+           INSERT IGNORE INTO bookings(lecturer_num, student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
+           VALUES(?,?,?,?,?,?,?,?,?)`, [num, null, type, date, start, end, loc, details, day]);
+        return true;
+    } catch (error) {
+        console.error('Error in createLecturerBooking:', error);
+        throw error;
+    }
+}
+
+export async function deleteBooking(id) {
+    try {
+        await pool.query(`
+            DELETE FROM bookings
+            WHERE booking_id = ?`, [id]);
+    } catch (error) {
+        console.error('Error in deleteBooking:', error);
+        throw error;
+    }
+}
+
+export async function updateBookingDetails(id, details) {
+    try {
+        await pool.query(`
+            UPDATE bookings
+            SET booking_details = ?
+            WHERE booking_id = ?`, [details, id]);
+    } catch (error) {
+        console.error('Error in updateBookingDetails:', error);
+        throw error;
+    }
 }
 
 //Table accepted >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function createAccepted(intID, bookID){
-    
-    await pool.query(`
-       INSERT IGNORE INTO accepted(interpreter_id, booking_id, accepted_date))
-       VALUES(?,?,?)`,[intID, bookID, today()]);
+export async function createAccepted(intID, bookID) {
+    try {
+        await pool.query(`
+           INSERT IGNORE INTO accepted(interpreter_id, booking_id, accepted_date)
+           VALUES(?,?,?)`, [intID, bookID, today()]);
+    } catch (error) {
+        console.error('Error in createAccepted:', error);
+        throw error;
+    }
 }
 
-export async function getAllAccepted(){
-    const [row] = await pool.query(`
-        SELECT *
-        FROM accepted;`);
-    return row;
+export async function getAllAccepted() {
+    try {
+        const [row] = await pool.query(`
+            SELECT *
+            FROM accepted;`);
+        return row;
+    } catch (error) {
+        console.error('Error in getAllAccepted:', error);
+        throw error;
+    }
 }
 
-export async function getIntAccepted(int){
-    const [row] = await pool.query(`
-        SELECT *
-        FROM accepted
-        WHERE interpreter_id = ?`,[int]);
-    return row;
+export async function getIntAccepted(int) {
+    try {
+        const [row] = await pool.query(`
+            SELECT *
+            FROM accepted
+            WHERE interpreter_id = ?`, [int]);
+        return row;
+    } catch (error) {
+        console.error('Error in getIntAccepted:', error);
+        throw error;
+    }
 }
 
-export async function getSingleAccepted(int, booking){
-    const [row] = await pool.query(`
-        SELECT *
-        FROM accepted
-        WHERE interpreter_id = ? AND booking_id = ?`,[int,booking]);
-    return row[0];
+export async function getSingleAccepted(int, booking) {
+    try {
+        const [row] = await pool.query(`
+            SELECT *
+            FROM accepted
+            WHERE interpreter_id = ? AND booking_id = ?`, [int, booking]);
+        return row[0];
+    } catch (error) {
+        console.error('Error in getSingleAccepted:', error);
+        throw error;
+    }
 }
 
-export async function getConfirmedBookingsLecturer(num){
-    const [rows] = await pool.query(`
-        SELECT bookings.*
-        FROM accepted
-        JOIN bookings ON accepted.booking_id = bookings.booking_id
-        WHERE bookings.lecturer_num = ?`,[num]);
-    return rows;
+export async function getConfirmedBookingsLecturer(num) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT bookings.*
+            FROM accepted
+            JOIN bookings ON accepted.booking_id = bookings.booking_id
+            WHERE bookings.lecturer_num = ?`, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getConfirmedBookingsLecturer:', error);
+        throw error;
+    }
 }
 
-export async function getConfirmedBookingsStudent(num){
-    const [rows] = await pool.query(`
-        SELECT accepted.*, bookings.*
-        FROM accepted
-        JOIN bookings ON accepted.booking_id = bookings.booking_id
-        WHERE bookings.student_num = ?`,[num]);
-    return rows;
+export async function getConfirmedBookingsStudent(num) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT accepted.*, bookings.*
+            FROM accepted
+            JOIN bookings ON accepted.booking_id = bookings.booking_id
+            WHERE bookings.student_num = ?`, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getConfirmedBookingsStudent:', error);
+        throw error;
+    }
 }
 
-export async function deleteAccepted(id){
-    await pool.query(`
-        DELETE FROM accepted
-        WHERE accepted_id = ?`,[id]);
+export async function deleteAccepted(id) {
+    try {
+        await pool.query(`
+            DELETE FROM accepted
+            WHERE accepted_id = ?`, [id]);
+    } catch (error) {
+        console.error('Error in deleteAccepted:', error);
+        throw error;
+    }
 }
 
 //Extra SQL queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 export async function updateStudent(updateData) {
-    await pool.query(`
-        UPDATE students
-        SET student_firstname = ?, student_lastname = ?, student_phonenum = ?, student_hearinglevel = ?, student_year = ?, student_coursecode = ?
-        WHERE student_num = ?`,[updateData.fname, updateData.lname, updateData.pnum, updateData.hearing, updateData.year, updateData.cc, updateData.num]);
+    try {
+        await pool.query(`
+            UPDATE students
+            SET student_firstname = ?, student_lastname = ?, student_phonenum = ?, student_hearinglevel = ?, student_year = ?, student_coursecode = ?
+            WHERE student_num = ?`, [updateData.fname, updateData.lname, updateData.pnum, updateData.hearing, updateData.year, updateData.cc, updateData.num]);
+    } catch (error) {
+        console.error('Error in updateStudent:', error);
+        throw error;
+    }
 }
 
 export async function updateInt(updateData) {
-    await pool.query(`
-        UPDATE interpreters
-        SET interpreter_firstname = ?, interpreter_lastname = ?, interpreter_phonenum = ?, interpreter_status = ?
-        WHERE interpreter_id = ?`,[updateData.fname, updateData.lname, updateData.pnum, updateData.status, updateData.id]);
+    try {
+        await pool.query(`
+            UPDATE interpreters
+            SET interpreter_firstname = ?, interpreter_lastname = ?, interpreter_phonenum = ?, interpreter_status = ?
+            WHERE interpreter_id = ?`, [updateData.fname, updateData.lname, updateData.pnum, updateData.status, updateData.id]);
+    } catch (error) {
+        console.error('Error in updateInt:', error);
+        throw error;
+    }
 }
 
 export async function updateLecturer(updateData) {
-    await pool.query(`
-        UPDATE lecturers
-        SET lecturer_firstname = ?, lecturer_lastname = ?, lecturer_department = ?, lecturer_phonenum = ?
-        WHERE lecturer_num = ?`,[updateData.fname, updateData.lname, updateData.dep, updateData.pnum, updateData.num]);
+    try {
+        await pool.query(`
+            UPDATE lecturers
+            SET lecturer_firstname = ?, lecturer_lastname = ?, lecturer_department = ?, lecturer_phonenum = ?
+            WHERE lecturer_num = ?`, [updateData.fname, updateData.lname, updateData.dep, updateData.pnum, updateData.num]);
+    } catch (error) {
+        console.error('Error in updateLecturer:', error);
+        throw error;
+    }
 }
 
 export async function updateBooking(updateData) {
-    await pool.query(`
-        UPDATE bookings
-        SET booking_type = ?, booking_date = ?, booking_start = ?, booking_end = ?, booking_location = ?, booking_details = ?
-        WHERE booking_id = ?`,[updateData.type, updateData.date, updateData.start, updateData.end, updateData.loc, updateData.details, updateData.id]);
+    try {
+        await pool.query(`
+            UPDATE bookings
+            SET booking_type = ?, booking_date = ?, booking_start = ?, booking_end = ?, booking_location = ?, booking_details = ?
+            WHERE booking_id = ?`, [updateData.type, updateData.date, updateData.start, updateData.end, updateData.loc, updateData.details, updateData.id]);
+    } catch (error) {
+        console.error('Error in updateBooking:', error);
+        throw error;
+    }
 }
 
 export async function updateAccepted(updateData) {
-    await pool.query(`
-        UPDATE accepted
-        SET interpreter_id = ?, booking_id = ?, accepted_date = ?
-        WHERE accepted_id = ?`,[updateData.intID, updateData.bookID, updateData.date, updateData.id]);
+    try {
+        await pool.query(`
+            UPDATE accepted
+            SET interpreter_id = ?, booking_id = ?, accepted_date = ?
+            WHERE accepted_id = ?`, [updateData.intID, updateData.bookID, updateData.date, updateData.id]);
+    } catch (error) {
+        console.error('Error in updateAccepted:', error);
+        throw error;
+    }
 }
 
 export async function updateStudentUser(updateData) {
-    await pool.query(`
-        UPDATE students_users
-        SET user_email = ?, user_passwordhash = ?
-        WHERE user_email = ?`,[updateData.email, updateData.password, updateData.oldEmail]);
+    try {
+        await pool.query(`
+            UPDATE students_users
+            SET user_email = ?, user_passwordhash = ?
+            WHERE user_email = ?`, [updateData.email, updateData.password, updateData.oldEmail]);
+    } catch (error) {
+        console.error('Error in updateStudentUser:', error);
+        throw error;
+    }
 }
 
-export async function checkBookings(date, start, end, loc){
-    const [rows] = await pool.query(`
-        SELECT *
-        FROM bookings
-        WHERE booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`,[date, start, end, loc]);
-    if(rows.length>0){
-        return true;
+export async function checkBookings(date, start, end, loc) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`, [date, start, end, loc]);
+        if (rows.length > 0) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error in checkBookings:', error);
+        throw error;
     }
-    return false
 }
 
 //Extra functions >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
