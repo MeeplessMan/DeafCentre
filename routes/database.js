@@ -422,7 +422,17 @@ export async function getLecturerID(user) {
 export async function getBookings() {
     try {
         const [rows] = await pool.query(`
-            SELECT * 
+            SELECT 
+                DATE_FORMAT(booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(booking_end, '%H:%i') AS booking_end, 
+                booking_id, 
+                student_num, 
+                lecturer_num, 
+                booking_type, 
+                booking_location, 
+                booking_details, 
+                booking_made
             FROM bookings`);
         return rows;
     } catch (error) {
@@ -434,7 +444,17 @@ export async function getBookings() {
 export async function getStudentBooking(num) {
     try {
         const [rows] = await pool.query(`
-            SELECT *
+            SELECT 
+                 DATE_FORMAT(booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(booking_end, '%H:%i') AS booking_end, 
+                booking_id, 
+                student_num, 
+                lecturer_num, 
+                booking_type, 
+                booking_location, 
+                booking_details, 
+                booking_made
             FROM bookings
             WHERE student_num = ? 
             `, [num]);
@@ -448,7 +468,17 @@ export async function getStudentBooking(num) {
 export async function getLecturerBooking(num) {
     try {
         const [rows] = await pool.query(`
-            SELECT *
+            SELECT 
+                DATE_FORMAT(booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(booking_end, '%H:%i') AS booking_end, 
+                booking_id, 
+                student_num, 
+                lecturer_num, 
+                booking_type, 
+                booking_location, 
+                booking_details, 
+                booking_made
             FROM bookings
             WHERE lecturer_num = ? 
             `, [num]);
@@ -459,12 +489,12 @@ export async function getLecturerBooking(num) {
     }
 }
 
-export async function checkBookingStudent(num, date, start, end, loc) {
+export async function checkBooking(date, start, end, loc) {
     try {
         const [rows] = await pool.query(`
             SELECT *
             FROM bookings
-            WHERE student_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`, [num, date, start, end, loc]);
+            WHERE booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`, [date, start, end, loc]);
         if (rows.length > 0) {
             return false;
         }
@@ -475,25 +505,9 @@ export async function checkBookingStudent(num, date, start, end, loc) {
     }
 }
 
-export async function checkBookingLecturer(num, date, start, end, loc) {
-    try {
-        const [rows] = await pool.query(`
-            SELECT *
-            FROM bookings
-            WHERE lecturer_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`, [num, date, start, end, loc]);
-        if (rows.length > 0) {
-            return false;
-        }
-        return true;
-    } catch (error) {
-        console.error('Error in checkBookingLecturer:', error);
-        throw error;
-    }
-}
-
 export async function createStudentBooking(num, type, date, start, end, loc, details) {
     try {
-        if (!await checkBookingStudent(num, date, start, end, loc)) { return false; }
+        if (!await checkBooking(date, start, end, loc)) { return false; }
         const day = await today();
         await pool.query(`
            INSERT IGNORE INTO bookings(student_num, lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
@@ -507,7 +521,7 @@ export async function createStudentBooking(num, type, date, start, end, loc, det
 
 export async function createLecturerBooking(num, type, date, start, end, loc, details) {
     try {
-        if (!await checkBookingLecturer(num, date, start, end, loc)) { return false; }
+        if (!await checkBooking(date, start, end, loc)) { return false; }
         const day = await today();
         await pool.query(`
            INSERT IGNORE INTO bookings(lecturer_num, student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
@@ -538,6 +552,29 @@ export async function updateBookingDetails(id, details) {
             WHERE booking_id = ?`, [details, id]);
     } catch (error) {
         console.error('Error in updateBookingDetails:', error);
+        throw error;
+    }
+}
+
+export async function getBooking(id){
+    try{
+        const [row] = await pool.query(`
+           SELECT 
+                DATE_FORMAT(booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(booking_end, '%H:%i') AS booking_end, 
+                booking_id, 
+                student_num, 
+                lecturer_num, 
+                booking_type, 
+                booking_location, 
+                booking_details, 
+                booking_made
+            FROM bookings
+            WHERE booking_id = ?`, [id]);
+        return row[0];
+    }catch(error){
+        console.error('Error in getBooking:', error);
         throw error;
     }
 }
