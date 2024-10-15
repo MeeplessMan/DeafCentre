@@ -275,18 +275,43 @@ export async function getLecturerBooking(num){
     return rows;
 }
 
+export async function checkBookingStudent(num, date, start, end, loc){
+    const [rows] = await pool.query(`
+        SELECT *
+        FROM bookings
+        WHERE student_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`,[num, date, start, end, loc]);
+    if(rows.length>0){
+        return false;
+    }
+    return true;
+}
+
+export async function checkBookingLecturer(num, date, start, end , loc){
+    const [rows] = await pool.query(`
+        SELECT *
+        FROM bookings
+        WHERE lecturer_num = ? AND booking_date = ? AND booking_start = ? AND booking_end = ? AND booking_location = ?`,[num, date, start, end, loc]);
+    if(rows.length>0){
+        return false;
+    }
+    return true
+}
+
 export async function createStudentBooking(num, type, date, start, end, loc, details){
+    if(!await checkBookingStudent(num, date, start, end, loc)){return false}
+    const day  = await today();
     await pool.query(`
-       INSERT IGNORE INTO bookings(student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
-       VALUES(?,?,?,?,?,?,?,?)`,[num, type, date, start, end, loc, details, today()]);
+       INSERT IGNORE INTO bookings(student_num, lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
+       VALUES(?,?,?,?,?,?,?,?,?)`,[num, null, type, date, start, end, loc, details, day]);
     return true;
 }
 
 export async function createLecturerBooking(num, type, date, start, end, loc, details){
-    checkBookings(date, start, end, loc);
+    if(!await checkBookingLecturer(num, date, start, end, loc)){return false}
+    const day = await today();
     await pool.query(`
-       INSERT IGNORE INTO bookings(lecturer_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
-       VALUES(?,?,?,?,?,?,?)`,[num, type, date, start, end, loc, details, today()]);
+       INSERT IGNORE INTO bookings(lecturer_num, student_num, booking_type, booking_date, booking_start, booking_end, booking_location, booking_details, booking_made)
+       VALUES(?,?,?,?,?,?,?,?,?)`,[num, null, type, date, start, end, loc, details, day]);
     return true;
 }
 
@@ -420,11 +445,13 @@ export async function today(){
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear().padStart(4, '0');
-    var hour = today.getHours().padstart(2, '0');
-    var min = today.getMinutes().padStart(2, '0');
-    var sec = today.getSeconds().padStart(2, '0');
-    return yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + min + ':' + sec;
+    var yyyy = String(today.getFullYear()).padStart(4, '0');
+    var hour = String(today.getHours()).padStart(2, '0');
+    var min = String(today.getMinutes()).padStart(2, '0');
+    var sec = String(today.getSeconds()).padStart(2, '0');
+    const age = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + min + ':' + sec;
+    console.log(age);
+    return age
 }
 
 export async function getHashedPassword(pass){
@@ -453,10 +480,10 @@ await createInt(4, 'Jack', 'Anderson', '5566778899', 'Active', 'jack.anderson@ex
 await createLecturer(1, 'Alice', 'Smith', 'Computer Science', '1234567890', 'alice.smith@example.com');
 await createLecturer(2, 'Bob', 'Jones', 'Mathematics', '0987654321', 'bob.jones@example.com');
 await createLecturer(3, 'Carol', 'White', 'Physics', '1122334455', 'carol.white@example.com');
-await createStudentBooking(1, 'Lecture', '2024/10/12', '10:00:00', '12:00:00', 'Room 1', 'Introduction to Computer Science');
-await createStudentBooking(2, 'Tutorial', '2024/10/12', '14:00:00', '16:00:00', 'Room 2', 'Introduction to Computer Science');
-await createStudentBooking(3, 'Lecture', '2024/10/13', '10:00:00', '12:00:00', 'Room 1', 'Introduction to Mathematics');
-await createStudentBooking(1, 'Tutorial', '2024/10/13', '14:00:00', '16:00:00', 'Room 2', 'Introduction to Mathematics');
-await createLecturerBooking(1, 'Lecture', '2024/10/12', '10:00:00', '12:00:00', 'Room 4', 'Introduction to Computer Science');
-await createLecturerBooking(2, 'Tutorial', '2024/10/12', '14:00:00', '16:00:00', 'Room 3', 'Introduction to Computer Science');
-await createLecutrerBooking(3, 'Lecture', '2024/10/13', '10:00:00', '12:00:00', 'Room 4', 'Introduction to Mathematics');
+await createStudentBooking(1, 'Lecture', '2024-10-12', '10:00:00', '12:00:00', 'Room 1', 'Introduction to Computer Science');
+await createStudentBooking(2, 'Tutorial', '2024-10-12', '14:00:00', '16:00:00', 'Room 2', 'Introduction to Computer Science');
+await createStudentBooking(3, 'Lecture', '2024-10-13', '10:00:00', '12:00:00', 'Room 1', 'Introduction to Mathematics');
+await createStudentBooking(1, 'Tutorial', '2024-10-13', '14:00:00', '16:00:00', 'Room 2', 'Introduction to Mathematics');
+await createLecturerBooking(1, 'Lecture', '2024-10-12', '10:00:00', '12:00:00', 'Room 4', 'Introduction to Computer Science');
+await createLecturerBooking(2, 'Tutorial', '2024-10-12', '14:00:00', '16:00:00', 'Room 3', 'Introduction to Computer Science');
+await createLecturerBooking(3, 'Lecture', '2024-10-13', '10:00:00', '12:00:00', 'Room 4', 'Introduction to Mathematics');
