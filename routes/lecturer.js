@@ -12,8 +12,7 @@ router.post('/login', async (req, res)=>{
     if(await data.valLecturerUser(user, password)){
         password = await data.getLecturerUserPass(user);
         req.session.user = {user, password};
-        const lecturer = await data.getLecturer(user);
-        res.status(200).render('Lecturer/home',{lecturer, user: req.session.user});
+        res.status(200).redirect('/lecturer/home');
     }else{
         res.status(200).render('Lecturer/login',{error: 'Invalid user or password'});
     }
@@ -25,7 +24,8 @@ router.get('/home', async(req, res)=>{
         return res.status(200).redirect('/lecturer/login');
     }
     const lecturer = await data.getLecturer(user.user);
-    res.status(200).render('Lecturer/home', {lecturer, user});
+    const bookings = await data.getLecturerBooking(lecturer.lecturer_num);
+    res.status(200).render('Lecturer/home', {lecturer, bookings, user});
 });
 
 router.get('/newBooking', async(req, res)=>{
@@ -36,6 +36,15 @@ router.get('/newBooking', async(req, res)=>{
     const lecturer = await data.getLecturer(user.user);
     res.status(200).render('Lecturer/acceptBooking', {lecturer, user});
 });
+
+router.post('/booking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!data.hashValLecturerUser(user.user, user.password)){
+        return res.status(200).redirect('/lecturer/login');
+    }
+    const booking = await data.getBooking(req.body.id);
+    res.status(200).render('Lecturer/booking', {booking, user});
+})
 
 router.get('/home1',(req, res)=>{
     res.status(200).redirect('/home');
