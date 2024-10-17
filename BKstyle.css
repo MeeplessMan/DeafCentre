@@ -102,12 +102,12 @@ body {
     display: block;
     margin-bottom: 10px;
     padding: 10px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #e9ecf0;
+    color: #0a0a0a;
     text-align: center;
     border-radius: 5px;
     cursor: pointer;
 }
 .time-slot:hover {
-    background-color: #0056b3;
+    background-color: #e8ebee;
 }
