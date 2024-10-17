@@ -37,21 +37,24 @@
                 <label for="additional-info">Additional Information:</label>
                 <textarea id="additional-info" name="additional-info"></textarea>
             </div>
-            <div class="time-slot" data-time="09:00">09:00 - 10:00</div>
-            <div class="time-slot" data-time="10:00">10:00 - 11:00</div>
-            <div class="time-slot" data-time="11:00">11:00 - 12:00</div>
-            <div class="time-slot" data-time="13:00">13:00 - 14:00</div>
-            <div class="time-slot" data-time="14:00">14:00 - 15:00</div>
-            <div class="time-slot" data-time="15:00">15:00 - 16:00</div>
+            <div class="time-slot">
+                <label for="time-slot">Time Slot:</label>
+                <select id="time-slot">
+                    <option value="09:00">09:00 - 10:00</option>
+                    <option value="10:00">10:00 - 11:00</option>
+                    <option value="11:00">11:00 - 12:00</option>
+                    <option value="13:00">13:00 - 14:00</option>
+                    <option value="14:00">14:00 - 15:00</option>
+                    <option value="15:00">15:00 - 16:00</option>
+                </select>
+            </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var sidebar = document.getElementById('sidebar');
             var selectedDate = null;
-
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 selectable: true,
@@ -75,17 +78,15 @@
             });
             calendar.render();
 
-            document.querySelectorAll('.time-slot').forEach(function(slot) {
-                slot.addEventListener('click', function() {
-                    var selectedTime = this.getAttribute('data-time');
-                    var bookingType = document.getElementById('booking-type').value;
-                    var location = document.getElementById('location').value;
-                    var additionalInfo = document.getElementById('additional-info').value;
-                    if (selectedDate) {
-                        // Redirect to confirmation page
-                        window.location.href = `confirmation.html?date=${selectedDate}&time=${selectedTime}&type=${bookingType}&location=${location}&info=${additionalInfo}`;
-                    }
-                });
+            document.getElementById('time-slot').addEventListener('change', function() {
+                var selectedTime = this.value;
+                var bookingType = document.getElementById('booking-type').value;
+                var location = document.getElementById('location').value;
+                var additionalInfo = document.getElementById('additional-info').value;
+                if (selectedDate) {
+                    // Redirect to confirmation page
+                    window.location.href = `confirmation.html?date=${selectedDate}&time=${selectedTime}&type=${bookingType}&location=${location}&info=${additionalInfo}`;
+                }
             });
         });
     </script>
