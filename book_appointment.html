@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="image.png" alt="DUT Logo" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="book_appointment.html">Book Appointment</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="booking">
+            <h1>Book an Appointment</h1>
+            <form action="process_booking.php" method="POST" class="booking-form">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="lecturer">Select Lecturer:</label>
+                <select id="lecturer" name="lecturer" required>
+                    <option value="Dr. Smith">Dr. Smith</option>
+                    <option value="Prof. John">Prof. John</option>
+                    <option value="Ms. Brown">Ms. Brown</option>
+                </select>
+
+                <label for="interpreter">Need an Interpreter?</label>
+                <select id="interpreter" name="interpreter" required>
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+
+                <label for="challenges">Challenges/Concerns:</label>
+                <textarea id="challenges" name="challenges" required></textarea>
+
+                <label for="date">Preferred Date:</label>
+                <input type="date" id="date" name="date" min="2024-10-01" required>
+
+                <label for="time">Preferred Time:</label>
+                <input type="time" id="time" name="time" min="08:00" max="16:00" required>
+
+                <button type="submit">Book Appointment</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 DUT Booking System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

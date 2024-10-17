@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator - DUT Booking System</title>
+    <style>
+        /* Simple admin panel styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .container {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #34495e;
+        }
+    </style>
+    <script>
+        
+        const appointments = [
+            {student: 'John Doe', lecturer: 'Lecturer 1', date: '2024-10-12', time: '10:00'},
+            {student: 'Jane Smith', lecturer: 'Lecturer 2', date: '2024-10-13', time: '11:00'}
+        ];
+
+        const lecturers = ['Lecturer 1', 'Lecturer 2'];
+
+        
+        function loadAppointments() {
+            const tableBody = document.getElementById('appointments-table-body');
+            tableBody.innerHTML = '';  
+            appointments.forEach((appointment, index) => {
+                const row = `<tr>
+                    <td>${appointment.student}</td>
+                    <td>${appointment.lecturer}</td>
+                    <td>${appointment.date}</td>
+                    <td>${appointment.time}</td>
+                    <td><button onclick="deleteAppointment(${index})">Delete</button></td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        
+        function deleteAppointment(index) {
+            appointments.splice(index, 1);  
+            loadAppointments();  
+        }
+
+       
+        function loadLecturers() {
+            const lecturersList = document.getElementById('lecturers-list');
+            lecturersList.innerHTML = '';  
+            lecturers.forEach((lecturer, index) => {
+                const listItem = `<li>${lecturer} <button onclick="deleteLecturer(${index})">Delete</button></li>`;
+                lecturersList.innerHTML += listItem;
+            });
+        }
+
+        
+        function deleteLecturer(index) {
+            lecturers.splice(index, 1);  
+            loadLecturers();  
+        }
+
+        
+        function addLecturer() {
+            const newLecturer = prompt('Enter the name of the new lecturer:');
+            if (newLecturer) {
+                lecturers.push(newLecturer);  
+                loadLecturers(); 
+            }
+        }
+
+        
+        window.onload = function() {
+            loadAppointments();
+            loadLecturers();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Administrator Dashboard</h2>
+
+        <h3>Manage Appointments</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Lecturer</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="appointments-table-body">
+                
+            </tbody>
+        </table>
+
+        <h3>Manage Lecturers</h3>
+        <ul id="lecturers-list">
+            
+        </ul>
+        <button onclick="addLecturer()">Add Lecturer</button>
+    </div>
+</body>
+</html>
