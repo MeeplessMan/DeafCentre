@@ -28,13 +28,13 @@ router.get('/home', async(req, res)=>{
     res.status(200).render('Student/home', {student, bookings, user});
 })
 
-router.get('/newBooking', async(req, res)=>{
+router.get('/profile', async(req, res)=>{
     const user = req.session.user;
     if(user == null||!await data.hashValStudentUser(user.user, user.password)){
         return res.status(200).redirect('/student/login');
     }
     const student = await data.getStudent(user.user);
-    res.status(200).render('Student/newBooking', {student, user});
+    res.status(200).render('Student/profile', {student, user});
 })
 
 router.get('/home1',(req, res)=>{

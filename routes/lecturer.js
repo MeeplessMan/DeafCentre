@@ -34,7 +34,7 @@ router.get('/newBooking', async(req, res)=>{
         return res.status(200).redirect('/lecturer/login');
     }
     const lecturer = await data.getLecturer(user.user);
-    res.status(200).render('Lecturer/acceptBooking', {lecturer, user});
+    res.status(200).render('Lecturer/newBooking', {lecturer, user});
 });
 
 router.post('/booking', async(req, res)=>{
@@ -45,6 +45,15 @@ router.post('/booking', async(req, res)=>{
     const booking = await data.getBooking(req.body.id);
     res.status(200).render('Lecturer/booking', {booking, user});
 })
+
+router.get('/profile', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValLecturerUser(user.user, user.password)){
+        return res.status(200).redirect('/lecturer/login');
+    }
+    const lecturer = await data.getLecturer(user.user);
+    res.status(200).render('Lecturer/profile', {lecturer, user});
+});
 
 router.get('/home1',(req, res)=>{
     res.status(200).redirect('/home');

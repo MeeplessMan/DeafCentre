@@ -1,0 +1,21 @@
+<html lang = "en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your Profile - Student Portal</title>
+        <link rel="stylesheet" href="styles3.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body>
+        <%- include('./partials/studNav.ejs') %>
+        <div class="container">
+            <h2>Your Profile</h2>
+            <div class="profile">
+                <h3>Your Profile</h3>
+                <h4>Student Number: <%= student.student_num%></h4>
+                <h4><%= student.student_firstname%> <%= student.student_lastname%></h4>
+                <p>Email: <%= student.user_email%></p>
+            </div>
+        </div>
+    </body>
+</html>
