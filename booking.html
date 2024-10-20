@@ -38,14 +38,25 @@
                 <textarea id="additional-info" name="additional-info"></textarea>
             </div>
             <div class="time-slot">
-                <label for="time-slot">Time Slot:</label>
-                <select id="time-slot">
-                    <option value="09:00">09:00 - 10:00</option>
-                    <option value="10:00">10:00 - 11:00</option>
-                    <option value="11:00">11:00 - 12:00</option>
-                    <option value="13:00">13:00 - 14:00</option>
-                    <option value="14:00">14:00 - 15:00</option>
-                    <option value="15:00">15:00 - 16:00</option>
+                <label for="start-time">Start Time:</label>
+                <select id="start-time">
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                </select>
+            </div>
+            <div class="time-slot">
+                <label for="end-time">End Time:</label>
+                <select id="end-time">
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
                 </select>
             </div>
         </div>
@@ -78,14 +89,15 @@
             });
             calendar.render();
 
-            document.getElementById('time-slot').addEventListener('change', function() {
-                var selectedTime = this.value;
+            document.getElementById('end-time').addEventListener('change', function() {
+                var startTime = document.getElementById('start-time').value;
+                var endTime = this.value;
                 var bookingType = document.getElementById('booking-type').value;
                 var location = document.getElementById('location').value;
                 var additionalInfo = document.getElementById('additional-info').value;
                 if (selectedDate) {
                     // Redirect to confirmation page
-                    window.location.href = `confirmation.html?date=${selectedDate}&time=${selectedTime}&type=${bookingType}&location=${location}&info=${additionalInfo}`;
+                    window.location.href = `confirmation.html?date=${selectedDate}&start=${startTime}&end=${endTime}&type=${bookingType}&location=${location}&info=${additionalInfo}`;
                 }
             });
         });
