@@ -8,10 +8,10 @@ router.get('/login',(req, res)=>{
 });
 
 router.post('/login', async (req, res)=>{
-    var {user, password} = req.body;
-    if(await data.valLecturerUser(user, password)){
-        password = await data.getLecturerUserPass(user);
-        req.session.user = {user, password};
+    var {user, password, type} = req.body;
+    if(await data.valUser(user, password, type)){
+        password = await data.getUserPass(user);
+        req.session.user = {user, password, type};
         res.status(200).redirect('/lecturer/home');
     }else{
         res.status(200).render('Lecturer/login',{error: 'Invalid user or password'});
@@ -20,7 +20,7 @@ router.post('/login', async (req, res)=>{
 
 router.get('/home', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValLecturerUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/lecturer/login');
     }
     const lecturer = await data.getLecturer(user.user);
@@ -30,7 +30,7 @@ router.get('/home', async(req, res)=>{
 
 router.get('/newBooking', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValLecturerUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/lecturer/login');
     }
     const lecturer = await data.getLecturer(user.user);
@@ -39,7 +39,7 @@ router.get('/newBooking', async(req, res)=>{
 
 router.post('/booking', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!data.hashValLecturerUser(user.user, user.password)){
+    if(user == null||!data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/lecturer/login');
     }
     const booking = await data.getBooking(req.body.id);
@@ -48,7 +48,7 @@ router.post('/booking', async(req, res)=>{
 
 router.get('/profile', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValLecturerUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/lecturer/login');
     }
     const lecturer = await data.getLecturer(user.user);

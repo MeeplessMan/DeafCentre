@@ -8,86 +8,88 @@ const pool = mysql.createPool({
     database: 'deafcentre'
 }).promise();
 
-//TABLE interpreters_users functions?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//TABLE users functions?>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-export async function getIntUsers() {
+export async function getUsers() {
     try {
         const [rows] = await pool.query(`
             SELECT * 
-            FROM interpreters_users`);
+            FROM users`);
         return rows;
     } catch (error) {
-        console.error('Error in getIntUsers:', error);
+        console.error('Error in getUsers:', error);
         throw error;
     }
 }
 
-export async function valIntUser(user, password) {
+export async function valUser(user, password, type) {
     try {
-        const row = await getIntUser(user);
+        const row = await getUser(user);
         if (row == null) { return false; }
+        if(row.user_type != type){return false;}
         return await bcrypt.compare(password, row.user_passwordhash);
     } catch (error) {
-        console.error('Error in valIntUser:', error);
+        console.error('Error in valUser:', error);
         throw error;
     }
 }
 
-export async function hashValIntUser(user, password) {
+export async function hashValUser(user, password, type) {
     try {
-        const row = await getIntUser(user);
+        const row = await getUser(user);
         if (row == null) { return false; }
+        if(row.user_type != type){return false;}
         return password == row.user_passwordhash;
     } catch (error) {
-        console.error('Error in hashValIntUser:', error);
+        console.error('Error in hashValUser:', error);
         throw error;
     }
 }
 
-export async function createIntUser(user, password) {
+export async function createUser(user, password, type) {
     try {
         const hashedPassword = await getHashedPassword(password);
         await pool.query(`
-            INSERT IGNORE INTO interpreters_users (user_email, user_passwordhash)
-            VALUES(?,?)
-            `, [user, hashedPassword]);
+            INSERT IGNORE INTO users (user_email, user_passwordhash, user_type)
+            VALUES(?,?,?)
+            `, [user, hashedPassword, type]);
     } catch (error) {
-        console.error('Error in createIntUser:', error);
+        console.error('Error in createUser:', error);
         throw error;
     }
 }
 
-export async function getIntUser(user) {
+export async function getUser(user) {
     try {
         const [row] = await pool.query(`
             SELECT * 
-            FROM interpreters_users 
+            FROM users 
             WHERE user_email = ?`, [user]);
         return row[0];
     } catch (error) {
-        console.error('Error in getIntUser:', error);
+        console.error('Error in getUser:', error);
         throw error;
     }
 }
 
-export async function setIntUserPass(user, newPass) {
+export async function setUserPass(user, newPass) {
     try {
         const hashedPassword = await getHashedPassword(newPass);
-        await pool.query(`UPDATE interpreters_users 
+        await pool.query(`UPDATE users 
             SET user_passwordhash = ?
             WHERE user_email = ?`, [hashedPassword, user]);
     } catch (error) {
-        console.error('Error in setIntUserPass:', error);
+        console.error('Error in setUserPass:', error);
         throw error;
     }
 }
 
-export async function getIntUserPass(user) {
+export async function getUserPass(user) {
     try {
-        const row = await getIntUser(user);
+        const row = await getUser(user);
         return row.user_passwordhash;
     } catch (error) {
-        console.error('Error in getIntUserPass:', error);
+        console.error('Error in getUserPass:', error);
         throw error;
     }
 }
@@ -153,89 +155,6 @@ export async function getIntID(user) {
     }
 }
 
-//TABLE students_users>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-export async function valStudentUser(user, password) {
-    try {
-        const row = await getStudentUser(user);
-        if (row == null) { return false; }
-        return await bcrypt.compare(password, row.user_passwordhash);
-    } catch (error) {
-        console.error('Error in valStudentUser:', error);
-        throw error;
-    }
-}
-
-export async function hashValStudentUser(user, password) {
-    try {
-        const row = await getStudentUser(user);
-        if (row == null) { return false; }
-        return password == row.user_passwordhash;
-    } catch (error) {
-        console.error('Error in hashValStudentUser:', error);
-        throw error;
-    }
-}
-
-export async function setStudentUserPass(user, newPass) {
-    try {
-        const hashedPassword = await getHashedPassword(newPass);
-        await pool.query(`UPDATE students_users 
-            SET user_passwordhash = ?
-            WHERE user_email = ?`, [hashedPassword, user]);
-    } catch (error) {
-        console.error('Error in setStudentUserPass:', error);
-        throw error;
-    }
-}
-
-export async function getStudentUsers() {
-    try {
-        const [rows] = await pool.query(`
-            SELECT * 
-            FROM students_users`);
-        return rows;
-    } catch (error) {
-        console.error('Error in getStudentUsers:', error);
-        throw error;
-    }
-}
-
-export async function getStudentUser(user) {
-    try {
-        const [row] = await pool.query(`
-            SELECT * 
-            FROM students_users 
-            WHERE user_email = ?`, [user]);
-        return row[0];
-    } catch (error) {
-        console.error('Error in getStudentUser:', error);
-        throw error;
-    }
-}
-
-export async function createStudentUser(user, password) {
-    try {
-        const hashedPassword = await getHashedPassword(password);
-        await pool.query(`
-            INSERT IGNORE INTO students_users (user_email, user_passwordhash)
-            VALUES(?,?)
-            `, [user, hashedPassword]);
-    } catch (error) {
-        console.error('Error in createStudentUser:', error);
-        throw error;
-    }
-}
-
-export async function getStudentUserPass(user) {
-    try {
-        const row = await getStudentUser(user);
-        return row.user_passwordhash;
-    } catch (error) {
-        console.error('Error in getStudentUserPass:', error);
-        throw error;
-    }
-}
-
 //TABLE students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 export async function getStudents() {
     try {
@@ -285,90 +204,6 @@ export async function getStudentID(user) {
 }
 
 //TABLE lecturers>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-export async function valLecturerUser(user, password) {
-    try {
-        const row = await getLecturerUser(user);
-        if (row == null) { return false; }
-        return await bcrypt.compare(password, row.user_passwordhash);
-    } catch (error) {
-        console.error('Error in valLecturerUser:', error);
-        throw error;
-    }
-}
-
-export async function hashValLecturerUser(user, password) {
-    try {
-        const row = await getLecturerUser(user);
-        if (row == null) { return false; }
-        return password == row.user_passwordhash;
-    } catch (error) {
-        console.error('Error in hashValLecturerUser:', error);
-        throw error;
-    }
-}
-
-export async function setLecturerUserPass(user, newPass) {
-    try {
-        const hashedPassword = await getHashedPassword(newPass);
-        await pool.query(`UPDATE students_users 
-            SET user_passwordhash = ?
-            WHERE user_email = ?`, [hashedPassword, user]);
-    } catch (error) {
-        console.error('Error in setLecturerUserPass:', error);
-        throw error;
-    }
-}
-
-export async function getLecturerUsers() {
-    try {
-        const [rows] = await pool.query(`
-            SELECT * 
-            FROM lecturers_users`);
-        return rows;
-    } catch (error) {
-        console.error('Error in getLecturerUsers:', error);
-        throw error;
-    }
-}
-
-export async function getLecturerUser(user) {
-    try {
-        const [row] = await pool.query(`
-            SELECT * 
-            FROM lecturers_users 
-            WHERE user_email = ?`, [user]);
-        return row[0];
-    } catch (error) {
-        console.error('Error in getLecturerUser:', error);
-        throw error;
-    }
-}
-
-export async function createLecturerUser(user, password) {
-    try {
-        const hashedPassword = await getHashedPassword(password);
-        await pool.query(`
-            INSERT IGNORE INTO lecturers_users (user_email, user_passwordhash)
-            VALUES(?,?)
-            `, [user, hashedPassword]);
-    } catch (error) {
-        console.error('Error in createLecturerUser:', error);
-        throw error;
-    }
-}
-
-export async function getLecturerUserPass(user) {
-    try {
-        const row = await getLecturerUser(user);
-        return row.user_passwordhash;
-    } catch (error) {
-        console.error('Error in getLecturerUserPass:', error);
-        throw error;
-    }
-}
-
-//TABLES students>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 export async function getLecturers() {
     try {
@@ -630,6 +465,30 @@ export async function getSingleAccepted(int, booking) {
     }
 }
 
+export async function getUnAcceptedBooking() {
+    try {
+        const [rows] = await pool.query(`
+            SELECT    
+                DATE_FORMAT(bookings.booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(bookings.booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(bookings.booking_end, '%H:%i') AS booking_end, 
+                bookings.booking_id, 
+                bookings.student_num, 
+                bookings.lecturer_num, 
+                bookings.booking_type, 
+                bookings.booking_location, 
+                bookings.booking_details, 
+                bookings.booking_made
+            FROM bookings
+            LEFT JOIN accepted ON bookings.booking_id = accepted.booking_id
+            WHERE accepted.booking_id IS NULL`);
+        return rows;
+    } catch (error) {
+        console.error('Error in getUnacceptedBookings:', error);
+        throw error;
+    }
+}
+
 export async function getConfirmedBookingsLecturer(num) {
     try {
         const [rows] = await pool.query(`
@@ -780,16 +639,16 @@ export async function getHashedPassword(pass){
     return password;
 }
 
-await createLecturerUser('alice.smith@example.com', 'Alice123!');
-await createLecturerUser('bob.jones@example.com', 'Bob123!');
-await createLecturerUser('carol.white@example.com', 'Carol123!');
-await createStudentUser('dave.brown@example.com', 'Dave123!');
-await createStudentUser('eve.d@example.com', 'Eve123!');
-await createStudentUser('frank.miller@example.com', 'Frank123!');
-await createIntUser('grace.wilson@example.com', 'Grace123!');
-await createIntUser('henry.moore@example.com', 'Henry123!');
-await createIntUser('irene.taylor@example.com', 'Irene123!');
-await createIntUser('jack.anderson@example.com', 'Jack123!');
+await createUser('alice.smith@example.com', 'Alice123!', 'L');
+await createUser('bob.jones@example.com', 'Bob123!', 'L');
+await createUser('carol.white@example.com', 'Carol123!', 'L');
+await createUser('dave.brown@example.com', 'Dave123!', 'S');
+await createUser('eve.d@example.com', 'Eve123!', 'S');
+await createUser('frank.miller@example.com', 'Frank123!', 'S');
+await createUser('grace.wilson@example.com', 'Grace123!', 'I');
+await createUser('henry.moore@example.com', 'Henry123!', 'I');
+await createUser('irene.taylor@example.com', 'Irene123!', 'I');
+await createUser('jack.anderson@example.com', 'Jack123!', 'I');
 await createStudent(1, 'Dave', 'Brown', '1234567890', 'dave.brown@example.com', 'Normal', 2023, 'CS101');
 await createStudent(2, 'Eve', 'Davis', '0987654321', 'eve.d@example.com', 'Moderate', 2023, 'CS102');
 await createStudent(3, 'Frank', 'Miller', '1122334455', 'frank.miller@example.com', 'Severe', 2023, 'CS103');

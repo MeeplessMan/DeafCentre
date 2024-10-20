@@ -8,10 +8,10 @@ router.get('/login',(req, res)=>{
 });
 
 router.post('/login', async (req, res)=>{
-    var {user, password} = req.body;
-    if(await data.valStudentUser(user, password)){
-        password = await data.getStudentUserPass(user);
-        req.session.user = {user, password};
+    var {user, password, type} = req.body;
+    if(await data.valUser(user, password, type)){
+        password = await data.getUserPass(user);
+        req.session.user = {user, password, type};
         res.status(200).redirect('/student/home');
     }else{
         res.status(200).render('Student/login',{error: 'Invalid user or password'});
@@ -20,7 +20,7 @@ router.post('/login', async (req, res)=>{
 
 router.get('/home', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValStudentUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/student/login');
     }
     const student = await data.getStudent(user.user);
@@ -30,12 +30,41 @@ router.get('/home', async(req, res)=>{
 
 router.get('/profile', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValStudentUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/student/login');
     }
     const student = await data.getStudent(user.user);
     res.status(200).render('Student/profile', {student, user});
 })
+
+router.post('/booking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/student/login');
+    }
+    const booking = await data.getBooking(req.body.id);
+    res.status(200).render('Student/booking', {booking, user});
+});
+
+router.get('/newBooking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/student/login');
+    }
+    const student = await data.getStudentID(user.user);
+    res.status(200).render('Student/newBooking', {student, user});
+});
+
+router.post('/newBooking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/student/login');
+    }
+    const student = await data.getStudentID(user.user);
+    const {date, start, end, location, details} = req.body;
+    const booking = await data.createStudentBooking(student.student_num, date, start, end, location, details);
+    res.status(200).redirect('/student/home');
+});
 
 router.get('/home1',(req, res)=>{
     res.status(200).redirect('/home');
@@ -49,33 +78,6 @@ router.get('/login1',(req, res)=>{
     res.status(200).redirect('/login');
 });
 
-router.post('/booking', async(req, res)=>{
-    const user = req.session.user;
-    if(user == null||!data.hashValStudentUser(user.user, user.password)){
-        return res.status(200).redirect('/student/login');
-    }
-    const booking = await data.getBooking(req.body.id);
-    res.status(200).render('Student/booking', {booking, user});
-});
 
-router.get('/newBooking', async(req, res)=>{
-    const user = req.session.user;
-    if(user == null||!data.hashValStudentUser(user.user, user.password)){
-        return res.status(200).redirect('/student/login');
-    }
-    const student = await data.getStudentID(user.user);
-    res.status(200).render('Student/newBooking', {student, user});
-});
-
-router.post('/newBooking', async(req, res)=>{
-    const user = req.session.user;
-    if(user == null||!data.hashValStudentUser(user.user, user.password)){
-        return res.status(200).redirect('/student/login');
-    }
-    const student = await data.getStudentID(user.user);
-    const {date, start, end, location, details} = req.body;
-    const booking = await data.createStudentBooking(student.student_num, date, start, end, location, details);
-    res.status(200).redirect('/student/home');
-});
 
 export default router;

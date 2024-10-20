@@ -9,12 +9,11 @@ router.get('/login',(req, res)=>{
 });
 
 router.post('/login', async (req, res)=>{
-    var {user, password} = req.body;
-    if(await data.valIntUser(user, password)){
+    var {user, password, type} = req.body;
+    if(await data.valUser(user, password, type)){
         password = await data.getIntUserPass(user);
-        req.session.user = {user, password};
-        const interpreter = await data.getInt(user, password);
-        res.status(200).render('Interpreter/home',{interpreter, user: req.session.user});
+        req.session.user = {user, password, type};
+        res.status(200).redirect('/interpreter/home');
     }else{
         res.status(200).render('Interpreter/login',{error: 'Invalid user or password'});
     }
@@ -22,20 +21,42 @@ router.post('/login', async (req, res)=>{
 
 router.get('/home', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValIntUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/interpreter/login');
     }
     const interpreter = await data.getInt(user.user);
-    res.status(200).render('Interpreter/home', {interpreter, user});
+    const bookings = await data.getIntAccepted(interpreter.interpreter_id);
+    const available = await data.getUnAcceptedBooking();
+    res.status(200).render('Interpreter/home', {interpreter, bookings, available, user});
 });
 
-router.get('/acceptBooking', async(req, res)=>{
+router.get('/noBooking', async(req, res)=>{
     const user = req.session.user;
-    if(user == null||!await data.hashValIntUser(user.user, user.password)){
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
         return res.status(200).redirect('/interpreter/login');
     }
     const interpreter = await data.getInt(user.user);
-    res.status(200).render('Interpreter/acceptBooking', {interpreter, user});
+    const bookings = await data.getIntAccepted(interpreter.interpreter_id);
+    res.status(200).render('Interpreter/acceptBooking', {bookings, user});
+});
+
+router.get('/acceptBooking/:booking_id', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/interpreter/login');
+    }
+    const interpreter = await data.getInt(user.user);
+    await data.createAccepted(interpreter.interpreter_id, req.params.booking_id);
+    res.status(200).redirect('/interpreter/acceptBooking');
+});
+
+router.post("/booking", async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/interpreter/login');
+    }
+    const booking = await data.getBooking(req.body.id);
+    res.status(200).render('Interpreter/booking', {booking, user});
 });
 
 router.get('/home1',(req, res)=>{
