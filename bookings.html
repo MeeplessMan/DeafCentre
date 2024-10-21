@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Student Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img id="userIcon" src="default-avatar.png" alt="User Icon" class="navbar-photo">
+                <input type="file" id="uploadPhoto" accept="image/*">
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="bookings.html"><i class="fas fa-calendar-alt"></i> My Bookings</a></li>
+                <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Your Bookings</h2>
+        <table id="dynamicTable">
+            <thead>
+                <tr>
+                    <th>Lecture</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Math 101</td>
+                    <td>2024-10-15</td>
+                    <td>10:00 AM</td>
+                    <td>Room 101</td>
+                    <td>Confirmed</td>
+                </tr>
+                <tr>
+                    <td>History 202</td>
+                    <td>2024-10-16</td>
+                    <td>11:00 AM</td>
+                    <td>Room 102</td>
+                    <td>Pending</td>
+                </tr>
+                <tr>
+                    <td>Biology 303</td>
+                    <td>2024-10-17</td>
+                    <td>12:00 PM</td>
+                    <td>Room 103</td>
+                    <td>Confirmed</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Student Portal</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
