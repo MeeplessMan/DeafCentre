@@ -1,4 +1,4 @@
-/* General Styles */
+* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -8,7 +8,7 @@ body {
 }
 
 header {
-    background-color: #004080;
+    background-color: #0055aa;
     color: white;
     padding: 10px 0;
 }
@@ -37,13 +37,7 @@ nav ul li {
 nav ul li a {
     color: white;
     text-decoration: none;
-    font-size: 24px;
-}
-
-nav ul li a i{
-    color: white; /* Set the icon color */
-    font-size: 24px; /* Adjust the icon size as needed */
-    transition: color 0.3s, transform 0.3s; /* Smooth transition for color and transform */
+    font-size: 18px;
 }
 
 h1, h2 {
@@ -200,6 +194,8 @@ footer {
     width: 100%;
 }
 
+
+
 /* Login and Booking Page Styles */
 form {
     background-color: white;
@@ -330,21 +326,52 @@ h1, h2 {
     color: #012447;
 }
 
-.hero-image {
-    width: 40%; /* Adjust the percentage to control the image size */
-    height: auto;
-    max-width: 1000px; /* Make sure it doesn't get too large on bigger screens */
-    display: block;
-    margin: 0 auto; /* Center the image */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow effect */
+#hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    animation: fadeIn 2s ease-in;
+    background-size: cover;
+    background-position: center;
 }
 
-@media (max-width: 768px) {
-    .hero-image {
-        width: 90%; /* On smaller screens, the image will be almost full-width */
-    }
+#hero .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 91, 154, 0.7); /* Adds a slight color overlay to the background images */
 }
 
+#hero h1 {
+    font-size: 4em;
+    margin: 0;
+    z-index: 1; /* Brings text to the front */
+}
+
+#hero p {
+    font-size: 1.5em;
+    z-index: 1;
+}
+
+.cta-button {
+    background-color: #ff6600;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 30px;
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+    z-index: 1;
+}
 
 .cta-buttons {
     margin-top: 20px;
@@ -392,18 +419,7 @@ h1, h2 {
     width: 50px;
 }
 
-.about-us, .success-stories, .impact {
-    padding: 50px 20px;
-    text-align: center;
-}
 
-.story {
-    margin: 20px 0;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
 
 footer {
     padding: 20px;
@@ -426,4 +442,76 @@ footer {
 body, html {
     margin: 0;
     padding: 0;
+}
+
+
+.cta-button {
+    background-color: #ff6600;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 30px;
+    margin-top: 20px;
+    display: inline-block;
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+    z-index: 1;
+}
+
+.cta-button:hover {
+    background-color: #e65500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+
+
+
+/* Hero Heading Styles */
+.hero-heading {
+    font-size: 4.5em;
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);  /* Adds a shadow to make it stand out */
+    z-index: 1;
+    margin: 0;
+    animation: slideIn 1s ease-out;
+}
+
+.hero-subheading {
+    font-size: 1.8em;
+    font-weight: 300;
+    color: #ffffff;
+    margin-top: 10px;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);  /* Similar shadow effect */
+    z-index: 1;
+    animation: fadeInUp 1.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

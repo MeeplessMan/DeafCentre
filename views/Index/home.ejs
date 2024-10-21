@@ -1,19 +1,18 @@
 <html lang="en">
 
-<!--Head Tag-->
-<%- include('./partials/head.ejs')%>
+<%- include('./partials/head.ejs') %>
 <body>
-    <!-- Navigation Bar -->
-    <%- include('./partials/nav.ejs')%>
-
+    <%- include('./partials/nav.ejs') %>
     <main>
-        <section class="hero">
-            <h1>Welcome to DUT Appointment Booking System</h1>
-            <p>Book appointments with interpreter services for your lectures and events.</p>
-        </section>
+        <section id="hero">
+            <div class="overlay"></div>
+            <h1>Welcome to Deaf Centre</h1>
+            <p>Empowering the Deaf Community</p>
+            <a href="#services" class="cta-button">Learn More</a>
+        </section>     
         
         </section>
-
+<section id = "services">
         <section class="features">
             <h2>What We Offer</h2>
             <div class="feature-grid">
@@ -28,37 +27,86 @@
                     <p>Lecturers can view student appointments, challenges, and prepare accordingly for efficient meetings.</p>
                 </div>
                 <div class="feature-item">
-                    <img src="/images/handshake.webp" alt="Support Icon">
+                    <img src="/images/handshake.png" alt="Support Icon">
                     <h3>Feedback</h3>
                     <p>Provide feedback on your experience with your interpreters assistance.</p>
                 </div>
             </div>
         </section>
-
+    </section>
         <section class="steps">
             <h2>How It Works</h2>
             <div class="steps-grid">
                 <div class="step-item">
                     <span class="step-number">1</span>
-                    <h3>Login</h3>
-                    <p>Use the credentials given by your co-ordinator</p>
+                    <h3>Login or Register</h3>
+                    <p>Use your DUT email and password given by your co-ordinator</p>
                 </div>
                 <div class="step-item">
                     <span class="step-number">2</span>
                     <h3>Book an Appointment</h3>
-                    <p>Send a request for an interpreter for your given time. Fill in the details of your appointment.</p>
+                    <p>Send a request for an interpreter for your given time. Fill in the details of your appointment</p>
                 </div>
                 <div class="step-item">
                     <span class="step-number">3</span>
-                    <h3>Attend lecture or Event</h3>
-                    <p>Attend your scheduled appointment with your interpreter.</p>
+                    <h3>Meet Your Lecturer</h3>
+                    <p>Attend your scheduled appointment with your interpreter</p>
                 </div>
             </div>
         </section>
     </main>
+
     <section class="about-us">
         <h2>About Us</h2>
-        <p>The DUT Booking System is here to simplify the appointment process between students and lecturers. Our goal is to ensure that students get the support they need by providing a platform for easy, organized communication and scheduling.</p>
+        <p>In line with DUT’s ENVISION 2030, the Information Systems Department is the proud custodian of the Deaf Centre. Based on Ritson Campus, the Deaf Centre offers holistic support to facilitate the successful inclusion of the Deaf community in mainstream education. The Centre boasts three qualified South African Sign Language interpreters and a Deaf Culture liaison officer. From a collaborative perspective, they support academic staff, offer South African Sign Language interpreting and translation services, support Deaf students with Deaf-on-Deaf tutoring and promote Deaf Culture awareness.</p>
     </section>
+
+    <section class="success-stories">
+
+    <footer>
+        <p>&copy; 2024 DUT Booking System. All rights reserved.</p>
+        <div class="socials">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+
+    <footer>
+        <div class="footer-container">
+            <p>&copy; 2024 DUT Booking System. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="login.html">Login</a>
+                
+                <a href="lecturer_view.html">Lecturer Access</a>
+            </div>
+        </div>
+    </footer>
+
+    <script >
+        const images = [
+            '/images/DUT.png',
+            '/images/_ASL for “LOVE” - fingerspelling_ Sticker for Sale by Jennaviveart.jpeg',
+            '/images/Disability-DSC00483.jpg',
+            '/images/DUT-Deaf-Centre.jpg'
+        ];
+
+        let currentIndex = 0;
+
+        function changeBackground() {
+            const heroSection = document.getElementById('hero');
+    
+            // Change the background image
+            heroSection.style.backgroundImage = `url(${images[currentIndex]})`;
+    
+            // Update the index, and loop back to the first image if needed
+            currentIndex = (currentIndex + 1) % images.length;
+        }
+        setInterval(changeBackground, 5000);
+
+        // Start with the first background image
+        changeBackground();
+
+    </script>
 </body>
 </html>

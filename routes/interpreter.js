@@ -11,7 +11,7 @@ router.get('/login',(req, res)=>{
 router.post('/login', async (req, res)=>{
     var {user, password, type} = req.body;
     if(await data.valUser(user, password, type)){
-        password = await data.getIntUserPass(user);
+        password = await data.getUserPass(user);
         req.session.user = {user, password, type};
         res.status(200).redirect('/interpreter/home');
     }else{
