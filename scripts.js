@@ -1,15 +1,13 @@
 function showTable() {
-    // Hide all tables first
-    document.querySelectorAll('.table-container').forEach(table => {
-        table.style.display = 'none';
+    const tables = document.querySelectorAll('.table-container');
+    const selectedTable = document.getElementById('tableSelect').value;
+
+    tables.forEach(table => {
+        table.style.display = 'none'; // Hide all tables
     });
 
-    // Get the selected value from the dropdown
-    const selectedValue = document.getElementById('tableSelect').value;
-
-    // If an option is selected, show the corresponding table
-    if (selectedValue) {
-        document.getElementById(selectedValue).style.display = 'block';
+    if (selectedTable) {
+        document.getElementById(selectedTable).style.display = 'block'; // Show selected table
     }
 }
 
