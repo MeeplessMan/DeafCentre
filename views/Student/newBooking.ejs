@@ -4,20 +4,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Booking Page</title>
         <link rel="stylesheet" href="/css/styles5.css">
+        <link rel="stylesheet" href="/css/styles3.css">
         <link  rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css'>
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
     </head>
     <body>
-        <nav>
-            <div class="profile-pic">
-                <img src="C:\Users\User\OneDrive\Documents\Lecturer\images\test.jpg" alt="Profile Picture">
-            </div>
-            <ul>
-                <li><a href="homepage.html">Home</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="book-interpreter.html">Book an Interpreter</a></li>
-            </ul>
-        </nav>
+        <%- include('./partials/studNav.ejs') %>
         <div id="calendar-container">
             <div id="calendar"></div>
             <div id="sidebar">
@@ -36,14 +28,29 @@
                     <label for="additional-info">Additional Information:</label>
                     <textarea id="additional-info" name="additional-info"></textarea>
                 </div>
-                <div class="time-slot" data-time="09:00">09:00 - 10:00</div>
-                <div class="time-slot" data-time="10:00">10:00 - 11:00</div>
-                <div class="time-slot" data-time="11:00">11:00 - 12:00</div>
-                <div class="time-slot" data-time="13:00">13:00 - 14:00</div>
-                <div class="time-slot" data-time="14:00">14:00 - 15:00</div>
-                <div class="time-slot" data-time="15:00">15:00 - 16:00</div>
+                <div class="time-slot">
+                    <label for="start-time">Start Time:</label>
+                    <select id="start-time">
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                    </select>
+                </div>
+                <div class="time-slot">
+                    <label for="end-time">End Time:</label>
+                    <select id="end-time">
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                    </select>
+                </div>
             </div>
-        </div>
     
         <script>
             document.addEventListener('DOMContentLoaded', function() {

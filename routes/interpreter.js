@@ -27,6 +27,7 @@ router.get('/home', async(req, res)=>{
     const interpreter = await data.getInt(user.user);
     const bookings = await data.getIntAccepted(interpreter.interpreter_id);
     const available = await data.getUnAcceptedBooking();
+    console.log(available);
     res.status(200).render('Interpreter/home', {interpreter, bookings, available, user});
 });
 
@@ -46,7 +47,7 @@ router.get('/acceptBooking/:booking_id', async(req, res)=>{
         return res.status(200).redirect('/interpreter/login');
     }
     const interpreter = await data.getInt(user.user);
-    await data.createAccepted(interpreter.interpreter_id, req.params.booking_id);
+    await data.createAccepted(interpreter.interpreter_id, req.params.booking_id, req.params.details);
     res.status(200).redirect('/interpreter/acceptBooking');
 });
 

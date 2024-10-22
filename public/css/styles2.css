@@ -6,6 +6,10 @@ body {
     color: #333;
 }
 
+img {
+    height: 50px;
+}
+
 header {
     background-color: #0055aa;
     color: white;
@@ -528,4 +532,285 @@ body, html {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.main-content1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.main-content2 {
+    margin-top: 80px; /* Adjust based on the height of your header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 80px);
+}
+
+.container1 {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: left;
+    position: relative;
+    margin-top: 80px; /* Add margin to avoid overlap with the navbar */
+}
+
+.container1 h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+.container2 {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: left; /* Align text to the left */
+    position: relative;
+    margin-top: 20px;/* Add margin to avoid overlap with the navbar */
+}
+
+.container2 h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+.feature-grid1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Adjust the gap between items as needed */
+}
+
+.feature-item1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 200px; /* Adjust the width as needed */
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+.feature-item1 img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px; /* Space between image and button */
+}
+
+.button {
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.button-teacher {
+    background-color: #007bff;
+}
+
+.button-student {
+    background-color: #28a745;
+}
+
+.button-interpreter {
+    background-color: #17a2b8;
+}
+
+.button-admin {
+    background-color: #dc3545;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .main-content {
+        margin-top: 80px; /* Increase margin for smaller screens */
+    }
+
+    .container {
+        margin-top: 100px; /* Increase margin for smaller screens */
+    }
+}
+
+.table-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 1px 2px;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+table button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+table button:hover {
+    background-color: #0056b3;
+}
+
+.booking-details {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.booking-details p {
+    text-align: left; /* Align text to the left */
+}
+
+.booking-details h2 {
+    text-align: left; /* Align heading to the left */
+    margin-bottom: 20px;
+}
+
+.detail {
+    margin-bottom: 20px;
+}
+
+.feedback-section {
+    margin-top: 20px;
+}
+
+#feedback {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.star-rating {
+    margin: 10px 0;
+}
+
+.star {
+    color: #ffcc00; /* Gold color for stars */
+    font-size: 24px;
+    cursor: pointer; /* Change cursor on hover */
+}
+
+/* Optional: Change the star color on hover */
+.star-rating input:checked ~ .star {
+    color: #ffcc00; /* Gold color for selected star */
+}
+
+
+/* stars code updated */
+
+.star-rating {
+    margin: 10px 0;
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+.star {
+    color: #ccc; /* Default color for unselected stars */
+    font-size: 24px;
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+/* Highlight stars on hover */
+.star:hover,
+.star:hover ~ .star {
+    color: #ffcc00; /* Gold color for highlighted stars */
+}
+
+/* Change the color of selected stars */
+.star.selected {
+    color: #ffcc00; /* Gold color for selected stars */
+}
+
+#submitFeedback {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 25px; /* Round the edges */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Change color on hover */
+#submitFeedback:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.update button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 100px; /* Round the edges */
+    width: 150px; /* Set button width */
+    height: 40px; /* Set button height */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    
 }

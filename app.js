@@ -4,6 +4,7 @@ import studentRoute from './routes/student.js'
 import interpreterRoute from './routes/interpreter.js'
 import lecturerRoute from './routes/lecturer.js'
 import indexRoute from './routes/index.js'
+import adminRoute from './routes/admin.js'
 import session from 'express-session'
 
 //express app
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/student', studentRoute)
 app.use('/lecturer',lecturerRoute)
 app.use('/interpreter', interpreterRoute)
+app.use('/admin', adminRoute)
 app.use('/', indexRoute)
 //App Home
 

@@ -37,6 +37,16 @@ router.get('/newBooking', async(req, res)=>{
     res.status(200).render('Lecturer/newBooking', {lecturer, user});
 });
 
+router.post('/newBooking', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/lecturer/login');
+    }
+    const lecturer = await data.getLecturer(user.user);
+    await data.createLecturerBooking(lecturer.lecturer_num, req.body.type, req.body.date, req.body.start, req.body.end, req.body.location, req.body.details);
+    res.status(200).redirect('/lecturer/home');
+});
+
 router.post('/booking', async(req, res)=>{
     const user = req.session.user;
     if(user == null||!data.hashValUser(user.user, user.password, user.type)){

@@ -61,8 +61,8 @@ router.post('/newBooking', async(req, res)=>{
         return res.status(200).redirect('/student/login');
     }
     const student = await data.getStudentID(user.user);
-    const {date, start, end, location, details} = req.body;
-    const booking = await data.createStudentBooking(student.student_num, date, start, end, location, details);
+    const {date, type, start, end, location, details} = req.body;
+    const booking = await data.createStudentBooking(student.student_num, type, date, start, end, location, details);
     res.status(200).redirect('/student/home');
 });
 

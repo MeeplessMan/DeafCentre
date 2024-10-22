@@ -15,6 +15,10 @@
             background-color: #f4f4f4;
             color: #333;
         }
+
+        .main-content {
+            margin-top: 60px; /* Adjust based on the height of your header */
+        }
         .container {
             width: 100%;
             max-width: 600px;
@@ -24,7 +28,7 @@
             border-radius: 12px;
             text-align: center;
             position: relative;
-            padding-top: 80px;
+            margin-top: 80px; /* Add margin to avoid overlap with the navbar */
         }
         .container h2 {
             font-size: 24px;
@@ -60,16 +64,35 @@
 </head>
 <body>
     <%- include('partials/nav') %>
+    <div class="main-content">
     <section id="hero">
         <div class="overlay"></div>
-        <div class="main-content">
-            <div class="container">
-                <h2>Select Your Role</h2>
-                <button class="button button-teacher" onclick="window.location.href='/lecturer/login'">Lecturer</button>
-                <button class="button button-student" onclick="window.location.href='/student/login'">Student</button>
-                <button class="button button-interpreter" onclick="window.location.href='/interpreter/login'">Interpreter</button>
-            </div>
+        <div class = "container">
+        <section id = "services1">
+            <section class="features1">
+                <h2>Login Areas</h2>
+                <div class="feature-grid1">
+                    <div class="feature-item1">
+                        <img src="/images/interpreter.png" alt="Schedule Icon">
+                        <button class="button button-interpreter" onclick="window.location.href='/interpreter/login'">Interpreter</button>
+                    </div>
+                    <div class="feature-item1">
+                        <img src="/images/lecture.png" alt="Lecturer Icon">
+                        <button class="button button-teacher" onclick="window.location.href='/lecturer/login'">Lecturer</button>
+                    </div>
+                    <div class="feature-item1">
+                        <img src="/images/graduated.png" alt="Support Icon">
+                        <button class="button button-student" onclick="window.location.href='/student/login'">Student</button>
+                    </div>
+                    <div class="feature-item1">
+                        <img src="/images/handshake.png" alt="Support Icon">
+                        <button class="button button-admin" onclick="window.location.href='/lecturer/login'">Admin</button>
+                    </div>
+                </div>
+            </section>
         </div>
+        </section>
+        </div> 
     </section>
 </body>
 <script>

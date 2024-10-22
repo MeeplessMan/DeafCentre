@@ -3,112 +3,120 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interpreter Portal</title>
-    <link rel="stylesheet" href="/css/styles3.css">
+    <link rel="stylesheet" href="/css/styles2.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <%- include('./partials/intNav.ejs') %>
-    <div class = "container">
-        <h2>Welcome to the Interpreter Portal</h2>
-    <div class = "dashboard">
-        <div class="profile">
-            <h2>Your Profile</h2>
-            <h3>Interpreter ID: <%= interpreter.interpreter_id%></h3>
-            <h3><%= interpreter.interpreter_firstname%> <%= interpreter.interpreter_lastname%></h3>
-            <p>Email: <%= interpreter.user_email%></p>
-            <button onclick="window.location.href='profile'">Edit Profile</button>
-        </div>
-        <div class="summary">
-            <h2>Summary</h2>
-            <p>Upcoming Bookings: <strong>3</strong></p>
-            <p>Total Bookings: <strong>10</strong></p>
-        </div>
-        <div class="notifications">
-            <h2>Notifications</h2>
-            <ul>
-                <li>Booking rescheduled for next week.</li>
-                <li>New booking available for confirmation.</li>
-            </ul>
-        </div>
-        <div class="booking-history">
-            <h2>Upcomming Bookings</h2>
-            <table id="dynamicTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Booking Type</th>
-                        <th>Lecturer</th>
-                        <th>Student</th>
-                        <th>Date</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Location</th>
-                        <th>Details</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(let i = 0; i < bookings.length; i++){%>
+    <section id = "services">
+        <section class="features">
+            <h2>asd</h2>
+            <h2></h2>
+            <h2>Welcome Interpreter!!!</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <img src="/images/interpreter.png" alt="Teacher">
+                    <h3>Your Profile</h3>
+                    <p>Interpreter ID: <%= interpreter.interpreter_id%></p>
+                    <p><%= interpreter.interpreter_firstname%> <%= interpreter.interpreter_lastname%><p>
+                    <p>Email: <%= interpreter.user_email%></p>
+                    <button class="button-teacher" onclick="window.location.href='profile.html'">Edit Profile</button>
+                </div>
+                <div class="feature-item">
+                    <img src="/images/contract.png" alt="summary">
+                    <h3>Summary</h3>
+                    <p>Upcoming Lectures: <strong>3</strong></p>
+                    <p>Total Bookings: <strong>10</strong></p>
+                </div>
+                <div class="feature-item">
+                    <img src="/images/notification.png" alt="notification">
+                    <h3>Notifications</h3>
+                    
+                    <p>Lecture rescheduled for next week.</p>
+                    <p>New course available for booking.</p>
+                </div>
+            </div>
+        </section>
+    </section>
+    <div class="main-content1">
+        <div class="container1">
+            <h2>Bookings</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
                         <tr>
-                            <td><%= bookings[i].booking_id %></td>
-                            <td><%= bookings[i].booking_type %></td>
-                            <td><%= bookings[i].lecturer_num %></td>
-                            <td><%= bookings[i].student_num %></td>
-                            <td><%= bookings[i].booking_date %></td>
-                            <td><%= bookings[i].booking_start %></td>
-                            <td><%= bookings[i].booking_end %></td>
-                            <td><%= bookings[i].booking_location %></td>
-                            <td><%= bookings[i].booking_details %></td>
-                            <td><form action = "booking" method = "post">
-                                <input type = "hidden" name = "id" value = "<%= bookings[i].booking_id %>">
-                                <button type = "submit">View</button>
-                            </form></td>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Location</th>
+                            <th>Details</th>
+                            <th>Action</th>
                         </tr>
-                    <%}%>
-                </tbody>
-            </table>
-        </div>
-        <div class="dashboard">
-        <div class = "booking-history">
-            <h2>Available Bookings</h2>
-            <table id="dynamicTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Booking Type</th>
-                        <th>Lecturer</th>
-                        <th>Student</th>
-                        <th>Date</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Location</th>
-                        <th>Details</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for(let i = 0; i < available.length; i++){%>
-                        <tr>
-                            <td><%= available[i].booking_id %></td>
-                            <td><%= available[i].booking_type %></td>
-                            <td><%= available[i].lecturer_num %></td>
-                            <td><%= available[i].student_num %></td>
-                            <td><%= available[i].booking_date %></td>
-                            <td><%= available[i].booking_start %></td>
-                            <td><%= available[i].booking_end %></td>
-                            <td><%= available[i].booking_location %></td>
-                            <td><%= available[i].booking_details %></td>
-                            <td><form action = "booking" method = "post">
-                                <input type = "hidden" name = "id" value = "<%= available[i].booking_id %>">
-                                <button type = "submit">View</button>
-                            </form></td>
-                        </tr>
-                    <%}%>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < bookings.length; i++){ %>
+                            <tr>
+                                <td><%= bookings[i].booking_id %></td>
+                                <td><%= bookings[i].booking_type %></td>
+                                <td><%= bookings[i].booking_date %></td>
+                                <td><%= bookings[i].booking_start %></td>
+                                <td><%= bookings[i].booking_end %></td>
+                                <td><%= bookings[i].booking_location %></td>
+                                <td><%= bookings[i].booking_details %></td>
+                                <td>
+                                    <form action="booking" method="post">
+                                        <input type="hidden" name="id" value="<%= bookings[i].booking_id %>">
+                                        <button type="submit">View</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    <div class="main-content1">
+        <div class="container1">
+            <h2>Bookings</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Location</th>
+                            <th>Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < available.length; i++){ %>
+                            <tr>
+                                <td><%= available[i].booking_id %></td>
+                                <td><%= available[i].booking_type %></td>
+                                <td><%= available[i].booking_date %></td>
+                                <td><%= available[i].booking_start %></td>
+                                <td><%= available[i].booking_end %></td>
+                                <td><%= available[i].booking_location %></td>
+                                <td><%= available[i].booking_details %></td>
+                                <td>
+                                    <form action="booking" method="post">
+                                        <input type="hidden" name="id" value="<%= available[i].booking_id %>">
+                                        <button type="submit">View</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
 </html>
