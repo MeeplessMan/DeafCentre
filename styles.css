@@ -1,0 +1,113 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+    font-family: Arial, sans-serif;
+    height: 100%; /* Ensure the body takes up full height */
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #958be0;
+    padding: 8px 20px; /* Add padding inside the navbar for spacing */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Ensures navbar wraps on small screens */
+    width: 100%; /* Ensure the navbar spans the full width of the screen */
+    box-sizing: border-box; /* Include padding in the navbar's width */
+}
+
+/* Navbar Left Section */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-photo {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #1c3f60;
+    transition: transform 0.3s ease;
+}
+
+.navbar-photo:hover {
+    cursor: pointer;
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+input[type="file"] {
+    display: none; /* Hide the file input, but allow users to click on the icon to upload */
+}
+
+/* Navbar Center (Links) */
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Ensure items wrap on smaller screens */
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #1c3f60;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: #007bff;
+}
+
+.navbar ul li a i {
+    margin-right: 5px;
+}
+
+/* Tables */
+.table-container {
+    display: none;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 50px; /* Adjust the margin as needed */
+}
+
+/* Filter Button Styles */
+#filterButton {
+    background-color: #958be0; /* Blue background */
+    color: white; /* White text */
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 10px; /* Space between the select and the button */
+}
+
+#filterButton:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
