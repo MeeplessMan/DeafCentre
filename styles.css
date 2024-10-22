@@ -1,0 +1,300 @@
+/* Reset default margin and padding */
+body, html {
+    background-color: #1c3f60;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #958be0;
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Ensures navbar wraps on small screens */
+}
+
+/* Navbar Left Section */
+.navbar-left {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.navbar-photo {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    object-fit: cover; /* Ensure the image fits well */
+    margin-right: 10px;
+    border: 2px solid #1c3f60;
+    transition: transform 0.3s ease; /* Smooth transition on hover */
+}
+
+.navbar-photo:hover {
+    cursor: pointer;
+    transform: scale(1.1); /* Slight zoom effect */
+}
+
+input[type="file"] {
+    display: none; /* Hide the file input, but allow users to click on the icon to upload */
+}
+
+/* Navbar Center (Links) */
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Ensure items wrap on smaller screens */
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #1c3f60;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.navbar ul li a:hover {
+    color: #007bff;
+}
+
+.navbar ul li a i {
+    margin-right: 5px;
+}
+
+/* Container Styles */
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto; /* Center the container */
+}
+
+/* Dashboard Styles */
+.dashboard {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap */
+    gap: 20px; /* Space between items */
+}
+
+.profile, .summary, .notifications, .booking-history {
+    
+    background-color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1; /* Allow flex items to grow */
+    min-width: 250px; /* Minimum width for responsiveness */
+}
+
+/* Targeting h3, h4, and p inside the .profile class */
+.profile h3, h4, p {
+    color: #1c3f60; /* Change to any color you prefer */
+    font-weight: bold;
+}
+
+
+/* Style for the button inside .profile */
+.profile button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 100px; /* Round the edges */
+    width: 150px; /* Set button width */
+    height: 40px; /* Set button height */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    
+}
+
+/* Change color on hover */
+.profile button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.summary h3, p {
+            color: #1c3f60;
+            font-weight: bold;
+            
+}
+
+.notifications h3, ul li {
+            color: #1c3f60;
+            font-weight: bold;
+
+}
+
+
+
+
+
+/* Table Styles */
+table {
+    width: 100%;
+    margin: 20px 0; /* Space above and below the table */
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Adjust this value to control the roundness */
+    overflow: hidden; /* Ensures the border radius affects the content inside */
+}
+
+table, th, td {
+    border: 1px solid #ccc; /* Apply a border around the table, headers, and cells */
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4; /* Light background for table headers */
+}
+
+/* Optional: Add a hover effect on table rows for better readability */
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #ffffff;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        align-items: flex-start;
+    }
+
+    .navbar-left {
+        margin-left: 10px; /* Adjust margin for smaller screens */
+    }
+
+    .navbar ul {
+        justify-content: flex-start;
+        margin-left: 10px;
+    }
+
+    .navbar ul li {
+        margin: 5px 0;
+    }
+}
+
+.welcomestudent {
+        text-align: center;
+        color: #ccc;
+        font-size: 20px;
+
+}
+
+
+/* for view page  */
+
+
+.booking-details {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.detail {
+    margin-bottom: 20px;
+}
+
+.feedback-section {
+    margin-top: 20px;
+}
+
+#feedback {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.star-rating {
+    margin: 10px 0;
+}
+
+.star {
+    color: #ffcc00; /* Gold color for stars */
+    font-size: 24px;
+    cursor: pointer; /* Change cursor on hover */
+}
+
+/* Optional: Change the star color on hover */
+.star-rating input:checked ~ .star {
+    color: #ffcc00; /* Gold color for selected star */
+}
+
+
+/* stars code updated */
+
+.star-rating {
+    margin: 10px 0;
+    cursor: pointer; /* Change cursor to pointer */
+}
+
+.star {
+    color: #ccc; /* Default color for unselected stars */
+    font-size: 24px;
+    transition: color 0.3s; /* Smooth transition for color change */
+}
+
+/* Highlight stars on hover */
+.star:hover,
+.star:hover ~ .star {
+    color: #ffcc00; /* Gold color for highlighted stars */
+}
+
+/* Change the color of selected stars */
+.star.selected {
+    color: #ffcc00; /* Gold color for selected stars */
+}
+
+#submitFeedback {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 25px; /* Round the edges */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Change color on hover */
+#submitFeedback:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.update button {
+    background-color: #007bff; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Padding for the button */
+    border-radius: 100px; /* Round the edges */
+    width: 150px; /* Set button width */
+    height: 40px; /* Set button height */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Change cursor to pointer when hovering */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    
+}

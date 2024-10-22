@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Additional CSS for button and stars */
+        .star {
+            font-size: 30px;
+            color: grey;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .star.selected {
+            color: gold;
+        }
+
+        #submitFeedback {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #submitFeedback:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <img id="userIcon" src="default-avatar.png" alt="User Icon" class="navbar-photo">
+                <input type="file" id="uploadPhoto" accept="image/*" style="display: none;">
+            </div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                
+                <li><a href="bookings.html"><i class="fas fa-calendar-alt"></i> My Bookings</a></li>
+                <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="booking-details">
+            <h2>Booking Details</h2>
+            <div class="detail">
+                <p><strong>Lecture Title:</strong> Math 101</p>
+                <p><strong>Date:</strong> 2024-10-15</p>
+                <p><strong>Time:</strong> 10:00 AM</p>
+                <p><strong>Room:</strong> Room 101</p>
+                <p><strong>Instructor:</strong> Dr. Smith</p>
+                <p><strong>Status:</strong> Confirmed</p>
+            </div>
+            
+            <div class="update"><a href=""><button>Update</button></a></div> 
+            <br><br>
+            <div class="update"><button>Delete</button></div>
+
+            <div class="feedback-section">
+                <h3>Provide Your Feedback</h3>
+                <textarea id="feedback" rows="4" placeholder="Write your feedback here..."></textarea>
+                
+                <div class="star-rating">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+
+                <button id="submitFeedback">Submit</button> 
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Student Portal</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
