@@ -1,4 +1,3 @@
-* General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -11,6 +10,11 @@ header {
     background-color: #0055aa;
     color: white;
     padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 .header-container {
@@ -27,6 +31,8 @@ header img {
 
 nav ul {
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 nav ul li {
@@ -38,6 +44,10 @@ nav ul li a {
     color: white;
     text-decoration: none;
     font-size: 18px;
+}
+
+.main-content {
+    margin-top: 60px;
 }
 
 h1, h2 {
@@ -193,8 +203,6 @@ footer {
     bottom: 0;
     width: 100%;
 }
-
-
 
 /* Login and Booking Page Styles */
 form {
@@ -445,6 +453,12 @@ body, html {
 }
 
 
+
+
+
+
+
+
 .cta-button {
     background-color: #ff6600;
     color: white;
@@ -463,7 +477,7 @@ body, html {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
+    from { opacity: 0.2; }
     to { opacity: 1; }
 }
 

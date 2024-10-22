@@ -4,29 +4,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Login</title>
     <link rel="stylesheet" href="/css/styles4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles2.css">
 </head>
 <body>
+    <%- include('./partials/nav.ejs') %>
+    <section id="hero">
+        <div class="overlay"></div>
+        <div class="login-container">
+            <!-- Back button -->
+            <button class="back-button" onclick="handleBackClick()">⬅️ Back</button>
 
-    <div class="login-container">
-        <!-- Back button -->
-        <button class="back-button" onclick="handleBackClick()">⬅️ Back</button>
-        
-        <h2>Student Login</h2>
-        <form id="login-form" action="login" method = "POST">
-            <label for="username">User Email</label>
-            <input type="text" name="user"id ="user" placeholder="Enter your email" required>
-            
-            <label for="password">Password</label>
-            <input type="password" name="password"id ="password" placeholder="Enter your password" required>
-            <input type="hidden" name="type" value="S">
-            <!-- Forgot password link -->
-            <button type="submit">Login</button>
-        </form>
-    </div>
+            <h2>Student Login</h2>
+            <form id="login-form" action="login" method = "POST">
+                <label for="username">User Email</label>
+                <input type="text" name="user"id ="user" placeholder="Enter your email" required>
+
+                <label for="password">Password</label>
+                <input type="password" name="password"id ="password" placeholder="Enter your password" required>
+                <input type="hidden" name="type" value="S">
+                <!-- Forgot password link -->
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </section>
 </body>
 <script>
-function handleBackClick() {
-    window.history.back(); // Navigate to the previous page
-}
+    function handleBackClick() {
+        window.history.back(); // Navigate to the previous page
+    }
+
+    const images = [
+            '/images/DUT.png',
+            '/images/_ASL for “LOVE” - fingerspelling_ Sticker for Sale by Jennaviveart.jpeg',
+            '/images/Disability-DSC00483.jpg',
+            '/images/DUT-Deaf-Centre.jpg'
+        ];
+
+    let currentIndex = 0;
+    function changeBackground() {
+        const heroSection = document.getElementById('hero');
+
+        // Change the background image
+        heroSection.style.backgroundImage = `url(${images[currentIndex]})`;
+
+        // Update the index, and loop back to the first image if needed
+        currentIndex = (currentIndex + 1) % images.length;
+    }
+    setInterval(changeBackground, 5000);
+    // Start with the first background image
+    changeBackground();
 </script>
 </html>
