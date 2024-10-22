@@ -7,7 +7,7 @@ body, html {
 
 /* Navbar Styles */
 .navbar {
-     background-color: #958be0;
+     background-color: #354db8;
     padding: 8px 0;
     display: flex;
     align-items: center;
@@ -28,7 +28,7 @@ body, html {
     height: 50px;
     object-fit: cover; /* Ensure the image fits well */
     margin-right: 10px;
-    border: 2px solid #007bff;
+    border: 2px solid #ffffff;
     transition: transform 0.3s ease; /* Smooth transition on hover */
 }
 
