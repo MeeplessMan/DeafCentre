@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Page</title>
-    <link rel="stylesheet" href="C:\Users\User\OneDrive\Documents\Lecturer\css\styles.css">
+    <link rel="stylesheet" href="C:\Users\User\OneDrive\Documents\Lecturer\styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <header>
         <nav class="navbar">
             <div class="navbar-left">
-                <img id="userIcon" src="default-avatar.png" alt="User Icon" class="navbar-photo">
+                <label for="uploadPhoto" class="upload-label">
+                    <img id="userIcon" src="default-avatar.png" alt="User Icon" class="navbar-photo">
+                </label>
                 <input type="file" id="uploadPhoto" accept="image/*">
             </div>
             <ul>
@@ -82,11 +84,6 @@
     </div>
 
     <script src="scripts.js"></script>
-    <script>
-        function applyFilter() {
-            // Logic for filtering the tables based on your criteria
-            alert("Filter applied!"); // Placeholder for actual filter logic
-        }
-    </script>
+    <script src="admin.js"></script> <!-- Reference to the new JavaScript file -->
 </body>
 </html>
