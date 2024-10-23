@@ -25,30 +25,9 @@ router.get('/home', async(req, res)=>{
         return res.status(200).redirect('/interpreter/login');
     }
     const interpreter = await data.getInt(user.user);
-    const bookings = await data.getIntAccepted(interpreter.interpreter_id);
+    const bookings = await data.getConfirmedBookingsInterpreter(interpreter.interpreter_id);
     const available = await data.getUnAcceptedBooking();
-    console.log(available);
     res.status(200).render('Interpreter/home', {interpreter, bookings, available, user});
-});
-
-router.get('/noBooking', async(req, res)=>{
-    const user = req.session.user;
-    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
-        return res.status(200).redirect('/interpreter/login');
-    }
-    const interpreter = await data.getInt(user.user);
-    const bookings = await data.getIntAccepted(interpreter.interpreter_id);
-    res.status(200).render('Interpreter/acceptBooking', {bookings, user});
-});
-
-router.get('/acceptBooking/:booking_id', async(req, res)=>{
-    const user = req.session.user;
-    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
-        return res.status(200).redirect('/interpreter/login');
-    }
-    const interpreter = await data.getInt(user.user);
-    await data.createAccepted(interpreter.interpreter_id, req.params.booking_id, req.params.details);
-    res.status(200).redirect('/interpreter/acceptBooking');
 });
 
 router.post("/booking", async(req, res)=>{
@@ -57,7 +36,65 @@ router.post("/booking", async(req, res)=>{
         return res.status(200).redirect('/interpreter/login');
     }
     const booking = await data.getBooking(req.body.id);
-    res.status(200).render('Interpreter/booking', {booking, user});
+    const accepted = await data.checkAcceptedBooking(req.body.id);
+    const completed = await data.isCompletedBooking(req.body.id);
+    if(accepted&&!completed){
+        const acBooking = await data.getSingleAccepted(req.body.id);
+        return res.status(200).render('Interpreter/booking', {booking, user, accepted, completed, acBooking});
+    }
+    if(accepted&&completed){
+        const acBooking = await data.getSingleAccepted(req.body.id);
+        const feedback = await data.getFeedback(req.body.id);
+        return res.status(200).render('Interpreter/booking', {booking, user, accepted, completed, acBooking, feedback});
+    }
+    res.status(200).render('Interpreter/booking', {booking, user, accepted, completed});
+});
+
+router.post('/accept', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/interpreter/login');
+    }
+    const {details, bookingId} = req.body;
+    const interpreter = await data.getInt(user.user);
+    await data.createAccepted(interpreter.interpreter_id, bookingId, details);
+    const booking = await data.getBooking(bookingId);
+    const acBooking = await data.getSingleAccepted(bookingId);
+    await data.createFeedback(acBooking.accepted_id, bookingId);
+    const accepted = await data.checkAcceptedBooking(bookingId);
+    const completed = await data.isCompletedBooking(bookingId);
+    const feedback = await data.getFeedback(bookingId);
+    res.status(200).render('Interpreter/booking', {booking, user, accepted, completed, acBooking, feedback});
+});
+
+router.post('/updateAccepted', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/interpreter/login');
+    }
+    const {details, bookingId} = req.body;
+    const interpreter = await data.getInt(user.user);
+    await data.setAcceptedDetails(bookingId, details);
+    const acBooking = await data.getSingleAccepted(bookingId);
+    const booking = await data.getBooking(bookingId);
+    const accepted = await data.checkAcceptedBooking(bookingId);
+    const completed = await data.isCompletedBooking(bookingId);
+    res.status(200).render('Interpreter/booking', {booking, user, accepted, completed, acBooking});
+});
+
+router.post('/feedback', async(req, res)=>{
+    const user = req.session.user;
+    if(user == null||!await data.hashValUser(user.user, user.password, user.type)){
+        return res.status(200).redirect('/interpreter/login');
+    }
+    var {bookingId, feedback} = req.body;
+    await data.updateFeedbackInterpreter(bookingId, feedback);
+    const booking = await data.getBooking(bookingId);
+    const acBooking = await data.getSingleAccepted(bookingId);
+    const accepted = await data.checkAcceptedBooking(bookingId);
+    const completed = await data.isCompletedBooking(bookingId);
+    feedback = await data.getFeedback(bookingId);
+    res.status(200).render('Interpreter/booking', {booking, user, accepted, completed, acBooking, feedback});
 });
 
 router.get('/home1',(req, res)=>{

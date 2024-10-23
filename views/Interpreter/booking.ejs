@@ -2,23 +2,218 @@
     <head>
         <meta charset = "UTF-8">
         <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
-        <title>Student Portal</title>
-        <link rel = "stylesheet" href = "/css/styles3.css">
+        <title>Interpreter Portal</title>
+        <link rel = "stylesheet" href = "/css/styles2.css">
         <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            /* Additional CSS for button and stars */
+            .star {
+                font-size: 30px;
+                color: grey;
+                cursor: pointer;
+                transition: color 0.3s;
+            }
+    
+            .star.selected {
+                color: gold;
+            }
+    
+            #submitFeedback {
+                background-color: #007BFF;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+    
+            #submitFeedback:hover {
+                background-color: #0056b3;
+            }
+        </style>
     </head>
     <body>
         <%- include('./partials/intNav.ejs') %>
-        </div class = "container">
-            <div class = "dashboard">
-                <div class="profile">
-                    <h3>Booking ID: <%= booking.booking_id%></h3>
-                    <h4>Student Number: <%= booking.student_num%></h4>
-                    <h4>Room Number: <%= booking.booking_location%></h4>
-                    <h4>Booking Date: <%= booking.booking_date%></h4>
-                    <h4>Booking Start Time: <%= booking.booking_start%></h4>
-                    <h4>Booking End Time: <%= booking.booking_end%></h4>
-                    <h4>Booking Details: <%= booking.booking_details%></h4>
+        <div class="main-content2">
+        <div class="container2">
+            <div class="booking-details">
+                <h2>Booking Details</h2>
+                <div class="detail">
+                    <p><strong>Booking ID:</strong> <%= booking.booking_id %></p>
+                    <p><strong>Type:</strong> <%= booking.booking_type %></p>
+                    <p><strong>Date:</strong> <%= booking.booking_date %></p>
+                    <p><strong>Start time:</strong> <%= booking.booking_start %></p>
+                    <p><strong>End time:</strong> <%= booking.booking_end %></p>
+                    <p><strong>Location:</strong> <%= booking.booking_location %></p>
+                    <p><strong>Details:</strong> <%= booking.booking_details %></p>
                 </div>
+                <% if(!accepted) { %>
+                    <div class="feedback-section">
+                        <h3>Accept Booking: Enter extra details</h3>
+                        <textarea id="details" name="details" rows="4" maxlength="255" placeholder="Write neccesary details..."></textarea>
+                        <br><br>
+                        <div class="update"><button id="accept">Accept</button></div>
+                    </div>
+                <%}%>
+                <% if (!completed&&accepted) { %>
+                    <div class="feedback-section">
+                        <h3>Your extra Details:<p><%= acBooking.accepted_details %></p></h3>
+                        <h3>Change Details:</h3>
+                        <textarea id="details" name="details1" rows="4" maxlength="255" placeholder="Write neccesary details..."></textarea>
+                        <br><br>
+                        <div class="update"><button id="update">Accept</button></div>
+                    </div>
+                <%}%>
+                <% if (accepted&&completed) { %>
+                <div class="feedback-section">
+                    <h3>Your feedback: <p><%= feedback.feedback_interpreter%></p></h3>
+                    <h3>Provide Your Feedback or Update</h3>
+                    <textarea id="feedback" name="feedback" rows="4" maxlength="255" placeholder="Write your feedback here..."></textarea>
+                    <br><br>
+                    <div class="update"><button id="submitFeedback">Submit</button></div>
+                </div>
+                <% } %>
             </div>
         </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const feedbackTextarea = document.getElementById('feedback');
+                const submitButton = document.getElementById('submitFeedback');
+                const acceptButton = document.getElementById('accept');
+                const updateButton = document.getElementById('update');
+                const deleteButton = document.getElementById('deleteBooking');
+                const detailsTextarea = document.getElementById('details');
+                const details1Textarea = document.getElementById('details1');
+
+
+
+            if (acceptButton) {
+                acceptButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    const details = detailsTextarea.value;
+                    const bookingId = '<%= booking.booking_id %>';
+
+                    // Create a form dynamically
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/interpreter/accept';
+
+                    // Create hidden input elements for details and booking ID
+                    const detailsInput = document.createElement('input');
+                    detailsInput.type = 'hidden';
+                    detailsInput.name = 'details';
+                    detailsInput.value = details;
+
+                    const bookingIdInput = document.createElement('input');
+                    bookingIdInput.type = 'hidden';
+                    bookingIdInput.name = 'bookingId';
+                    bookingIdInput.value = bookingId;
+
+                    // Append inputs to the form
+                    form.appendChild(detailsInput);
+                    form.appendChild(bookingIdInput);
+
+                    // Append form to the body and submit it
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+
+            if (updateButton) {
+                updateButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    const details1 = details1Textarea.value;
+                    const bookingId = '<%= booking.booking_id %>';
+
+                    // Create a form dynamically
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/interpreter/updateAccepted';
+
+                    // Create hidden input elements for details1 and booking ID
+                    const details1Input = document.createElement('input');
+                    details1Input.type = 'hidden';
+                    details1Input.name = 'details1';
+                    details1Input.value = details1;
+
+                    const bookingIdInput = document.createElement('input');
+                    bookingIdInput.type = 'hidden';
+                    bookingIdInput.name = 'bookingId';
+                    bookingIdInput.value = bookingId;
+
+                    // Append inputs to the form
+                    form.appendChild(details1Input);
+                    form.appendChild(bookingIdInput);
+
+                    // Append form to the body and submit it
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+
+            if (submitButton) {
+                submitButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    const feedback = feedbackTextarea.value;
+
+                    // Create a form dynamically
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/interpreter/feedback';
+
+                    // Create hidden input elements for feedback and booking ID
+                    const feedbackInput = document.createElement('input');
+                    feedbackInput.type = 'hidden';
+                    feedbackInput.name = 'feedback';
+                    feedbackInput.value = feedback;
+
+                    const bookingIdInput = document.createElement('input');
+                    bookingIdInput.type = 'hidden';
+                    bookingIdInput.name = 'bookingId';
+                    bookingIdInput.value = '<%= booking.booking_id %>';
+
+                    // Append inputs to the form
+                    form.appendChild(feedbackInput);
+                    form.appendChild(bookingIdInput);
+
+                    // Append form to the body and submit it
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+
+            if (deleteButton) {
+                deleteButton.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    const bookingId = '<%= booking.booking_id %>';
+
+                    // Create a form dynamically
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/deleteBooking';
+
+                    // Create hidden input element for booking ID
+                    const bookingIdInput = document.createElement('input');
+                    bookingIdInput.type = 'hidden';
+                    bookingIdInput.name = 'bookingId';
+                    bookingIdInput.value = bookingId;
+
+                    // Append input to the form
+                    form.appendChild(bookingIdInput);
+
+                    // Append form to the body and submit it
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            }
+        });
+        </script>
+    </body>
 </html>

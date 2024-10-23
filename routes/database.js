@@ -475,7 +475,7 @@ export async function createAccepted(intID, bookID, details) {
     try {
         await pool.query(`
            INSERT IGNORE INTO accepted(interpreter_id, booking_id, accepted_date, accepted_details)
-           VALUES(?,?,?,?)`, [intID, bookID, today(), details]);
+           VALUES(?,?,?,?)`, [intID, bookID, await today(), details]);
     } catch (error) {
         console.error('Error in createAccepted:', error);
         throw error;
@@ -507,12 +507,35 @@ export async function getIntAccepted(int) {
     }
 }
 
-export async function getSingleAccepted(int, booking) {
+export async function getConfirmedBookingsInterpreter(num) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT DATE_FORMAT(bookings.booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(bookings.booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(bookings.booking_end, '%H:%i') AS booking_end, 
+                bookings.booking_id, 
+                bookings.student_num, 
+                bookings.lecturer_num, 
+                bookings.admin_id,
+                bookings.booking_type, 
+                bookings.booking_location, 
+                bookings.booking_details, 
+                bookings.booking_made
+            FROM accepted
+            JOIN bookings ON accepted.booking_id = bookings.booking_id
+            WHERE accepted.interpreter_id = ?`, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getConfirmedBookingsInterpreter:', error);
+        throw error;
+    }
+}
+export async function getSingleAccepted(id) {
     try {
         const [row] = await pool.query(`
             SELECT *
             FROM accepted
-            WHERE interpreter_id = ? AND booking_id = ?`, [int, booking]);
+            WHERE booking_id = ?`, [id]);
         return row[0];
     } catch (error) {
         console.error('Error in getSingleAccepted:', error);
@@ -525,7 +548,7 @@ export async function setAcceptedDetails(id, details) {
         await pool.query(`
             UPDATE accepted
             SET accepted_details = ?
-            WHERE accepted_id = ?`, [details, id]);
+            WHERE booking_id = ?`, [details, id]);
     } catch (error) {
         console.error('Error in setAcceptedDetails:', error);
         throw error;
@@ -542,6 +565,7 @@ export async function getUnAcceptedBooking() {
                 bookings.booking_id, 
                 bookings.student_num, 
                 bookings.lecturer_num, 
+                bookings.admin_id,
                 bookings.booking_type, 
                 bookings.booking_location, 
                 bookings.booking_details, 
@@ -556,10 +580,63 @@ export async function getUnAcceptedBooking() {
     }
 }
 
+export async function getUnAcceptedBookingsStudent(num){
+    try {
+        const [rows] = await pool.query(`
+            SELECT    
+                DATE_FORMAT(bookings.booking_date, '%Y-%m-%d') AS booking_date, 
+                DATE_FORMAT(bookings.booking_start, '%H:%i') AS booking_start, 
+                DATE_FORMAT(bookings.booking_end, '%H:%i') AS booking_end, 
+                bookings.booking_id, 
+                bookings.booking_type, 
+                bookings.booking_location, 
+                bookings.booking_details, 
+                bookings.booking_made
+            FROM bookings
+            LEFT JOIN accepted ON bookings.booking_id = accepted.booking_id
+            WHERE bookings.student_num = ? AND accepted.booking_id IS NULL`, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getUnacceptedBookings:', error);
+        throw error;
+    }
+}
+
+export async function getUnAcceptedBookingsLecturer(num){
+    try {
+        const [rows] = await pool.query(`
+            SELECT
+                DATE_FORMAT(bookings.booking_date, '%Y-%m-%d') AS booking_date,
+                DATE_FORMAT(bookings.booking_start, '%H:%i') AS booking_start,
+                DATE_FORMAT(bookings.booking_end, '%H:%i') AS booking_end,
+                bookings.booking_id,
+                bookings.booking_type,
+                bookings.booking_location,
+                bookings.booking_details,
+                bookings.booking_made
+            FROM bookings
+            LEFT JOIN accepted ON bookings.booking_id = accepted.booking_id
+            WHERE bookings.lecturer_num = ? AND accepted.booking_id IS NULL`, [num]);
+        return rows;
+    } catch (error) {
+        console.error('Error in getUnacceptedBookings:', error);
+        throw error;
+    }
+}
+
+
 export async function getConfirmedBookingsLecturer(num) {
     try {
         const [rows] = await pool.query(`
-            SELECT bookings.*
+            SELECT 
+                DATE_FORMAT(bookings.booking_date, '%Y-%m-%d') AS booking_date,
+                DATE_FORMAT(bookings.booking_start, '%H:%i') AS booking_start,
+                DATE_FORMAT(bookings.booking_end, '%H:%i') AS booking_end,
+                bookings.booking_id,
+                bookings.booking_type,
+                bookings.booking_location,
+                bookings.booking_details,
+                bookings.booking_made
             FROM accepted
             JOIN bookings ON accepted.booking_id = bookings.booking_id
             WHERE bookings.lecturer_num = ?`, [num]);
@@ -573,7 +650,15 @@ export async function getConfirmedBookingsLecturer(num) {
 export async function getConfirmedBookingsStudent(num) {
     try {
         const [rows] = await pool.query(`
-            SELECT accepted.*, bookings.*
+            SELECT 
+                DATE_FORMAT(bookings.booking_date, '%Y-%m-%d') AS booking_date,
+                DATE_FORMAT(bookings.booking_start, '%H:%i') AS booking_start,
+                DATE_FORMAT(bookings.booking_end, '%H:%i') AS booking_end,
+                bookings.booking_id,
+                bookings.booking_type,
+                bookings.booking_location,
+                bookings.booking_details,
+                bookings.booking_made
             FROM accepted
             JOIN bookings ON accepted.booking_id = bookings.booking_id
             WHERE bookings.student_num = ?`, [num]);
@@ -595,7 +680,121 @@ export async function deleteAccepted(id) {
     }
 }
 
+export async function checkAcceptedBooking(id) {
+    try {
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM accepted
+            WHERE booking_id = ?`, [id]);
+        if (rows.length > 0) {
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error in checkAcceptedBooking:', error);
+        throw error;
+    }
+}
+
+//Table feedback >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+export async function createFeedback(acceptedID, bookingID) {
+    try {
+        await pool.query(`
+            INSERT IGNORE INTO feedback(accepted_id, booking_id)
+            VALUES(?,?)`, [acceptedID, bookingID]);
+    } catch (error) {
+        console.error('Error in createFeedback:', error);
+        throw error;
+    }
+}
+
+export async function updateFeedbackBooker(id, details, rating) {
+    try {
+        await pool.query(`
+            UPDATE feedback
+            SET feedback_booker = ?, feedback_interpreter_rating = ?
+            WHERE booking_id = ?`, [details, rating, id]);
+    } catch (error) {
+        console.error('Error in updateFeedbackBooker:', error);
+        throw error;
+    }
+}
+
+export async function updateFeedbackInterpreter(id, details) {
+    try {
+        await pool.query(`
+            UPDATE feedback
+            SET feedback_interpreter = ?
+            WHERE booking_id = ?`, [details, id]);
+    } catch (error) {
+        console.error('Error in updateFeedbackInterpreter:', error);
+        throw error;
+    }
+}
+
+export async function getFeedback(id) {
+    try {
+        const [row] = await pool.query(`
+            SELECT *
+            FROM feedback
+            WHERE booking_id = ?`, [id]);
+        return row[0];
+    } catch (error) {
+        console.error('Error in getFeedback:', error);
+        throw error;
+    }
+}
+
 //Extra SQL queries >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+export async function isCompletedBooking(id){
+    try{
+        const date = await todayDate();
+        const time = await todayTime();
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE booking_id = ? AND (booking_date < ?)OR  (booking_date = ? AND booking_end < ?)`, [id, date, date, time]);
+        if(rows.length > 0){
+            return true;
+        }
+        return false;
+    }catch(error){
+        console.error('Error in isCompletedBooking:', error);
+        throw error;
+    }
+}
+
+export async function isCompletedStudentBooking(id){
+    try{
+        const date = await todayDate();
+        const time = await todayTime();
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE student_num = ? AND (booking_date <= ? AND booking_end < ?) OR (booking_date < ? AND booking_end > ?)`, [id, date, time, date, time]);
+        return rows;
+    }catch(error){
+        console.error('Error in isCompletedStudentBooking:', error);
+        throw error;
+    }
+}
+
+export async function isCompletedLecturerBooking(id){
+    try{
+        const date = await todayDate();
+        const time = await todayTime();
+        const [rows] = await pool.query(`
+            SELECT *
+            FROM bookings
+            WHERE lecturer_num = ? AND (booking_date <= ? AND booking_end < ?) OR (booking_date < ? AND booking_end > ?)`, [id, date, time, date, time]);
+        return rows;
+    }catch(error){
+        console.error('Error in isCompletedLecturerBooking:', error);
+        throw error;
+    }
+}
 
 export async function updateStudent(updateData) {
     try {
@@ -633,12 +832,12 @@ export async function updateLecturer(updateData) {
     }
 }
 
-export async function updateBooking(updateData) {
+export async function updateBooking(id, type, date, start, end, loc, details) {
     try {
         await pool.query(`
             UPDATE bookings
             SET booking_type = ?, booking_date = ?, booking_start = ?, booking_end = ?, booking_location = ?, booking_details = ?
-            WHERE booking_id = ?`, [updateData.type, updateData.date, updateData.start, updateData.end, updateData.loc, updateData.details, updateData.id]);
+            WHERE booking_id = ?`, [type, date, start, end, loc, details, id]);
     } catch (error) {
         console.error('Error in updateBooking:', error);
         throw error;
@@ -711,6 +910,24 @@ export async function today(){
     var sec = String(today.getSeconds()).padStart(2, '0');
     const age = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + min + ':' + sec;
     console.log(age);
+    return age
+}
+
+export async function todayDate(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = String(today.getFullYear()).padStart(4, '0');
+    const age = yyyy + '-' + mm + '-' + dd;
+    return age
+}
+
+export async function todayTime(){
+    var today = new Date();
+    var hour = String(today.getHours()).padStart(2, '0');
+    var min = String(today.getMinutes()).padStart(2, '0');
+    var sec = String(today.getSeconds()).padStart(2, '0');
+    const age = hour + ':' + min + ':' + sec;
     return age
 }
 

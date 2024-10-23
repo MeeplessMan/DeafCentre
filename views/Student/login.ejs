@@ -25,6 +25,9 @@
                 <input type="hidden" name="type" value="S">
                 <!-- Forgot password link -->
                 <button type="submit">Login</button>
+                <%if (error) { %>
+                    <p class="error"style="color: red;"><%= error %></p>
+                <%} %>
             </form>
         </div>
     </section>

@@ -1,92 +1,267 @@
-<html lang = "en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Booking Page</title>
-        <link rel="stylesheet" href="/css/styles5.css">
-        <link  rel='stylesheet' href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css'>
-        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js'></script>
-    </head>
-    <body>
-        <nav>
-            <div class="profile-pic">
-                <img src="C:\Users\User\OneDrive\Documents\Lecturer\images\test.jpg" alt="Profile Picture">
-            </div>
-            <ul>
-                <li><a href="homepage.html">Home</a></li>
-                <li><a href="login.html">Login</a></li>
-                <li><a href="book-interpreter.html">Book an Interpreter</a></li>
-            </ul>
-        </nav>
-        <div id="calendar-container">
-            <div id="calendar"></div>
-            <div id="sidebar">
-                <div class="booking-type">
-                    <label for="booking-type">Booking Type:</label>
-                    <select id="booking-type">
-                        <option value="lecturer">Lecturer</option>
-                        <option value="student">Student</option>
-                    </select>
-                </div>
-                <div class="location">
-                    <label for="location">Location:</label>
-                    <input type="text" id="location" name="location">
-                </div>
-                <div class="additional-info">
-                    <label for="additional-info">Additional Information:</label>
-                    <textarea id="additional-info" name="additional-info"></textarea>
-                </div>
-                <div class="time-slot" data-time="09:00">09:00 - 10:00</div>
-                <div class="time-slot" data-time="10:00">10:00 - 11:00</div>
-                <div class="time-slot" data-time="11:00">11:00 - 12:00</div>
-                <div class="time-slot" data-time="13:00">13:00 - 14:00</div>
-                <div class="time-slot" data-time="14:00">14:00 - 15:00</div>
-                <div class="time-slot" data-time="15:00">15:00 - 16:00</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Booking</title>
+    <link rel="stylesheet" href="/css/styles2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <%- include('./partials/lecNav.ejs') %>
+    <div class="main-content2">
+        <div class="container2">
+            <div class="booking-details">
+                <h2>Create New Booking:</h2>
+                <form id="newBookingForm" action="/lecturer/newBooking" method="POST">
+                    <div class="detail">
+                        <label for="booking-type">Booking Type:</label>
+                        <select id="booking-type" name="type">
+                            <option value="Lecture">Lecture</option>
+                            <option value="Tutorial">Tutorial</option>
+                            <option value="Consultation">Consultation</option>
+                            <option value="Meeting">Meeting</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="detail">
+                        <label for="year">Year:</label>
+                        <select id="year" name="year">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="detail">
+                        <label for="month">Month:</label>
+                        <select id="month" name="month">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="detail">
+                        <label for="day">Day:</label>
+                        <select id="day" name="day">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <input type="hidden" name="date" id="date" value="">
+                    <div class="detail">
+                        <label for="start-time">Start Time:</label>
+                        <select id="start-time" name="startTime" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="detail">
+                        <label for="end-time">End Time:</label>
+                        <select id="end-time" name="endTime" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="detail">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" name="location" maxlength="25" required>
+                    </div>
+                    <div class="detail">
+                        <h3>Details:</h3>
+                        <textarea id="details" name="details" rows="4" maxlength="255" placeholder="Write necessary details..." required></textarea>
+                    </div>
+                    <div class="update">
+                        <button type="submit" id="newBooking">Create Booking</button>
+                    </div>
+                </form>
             </div>
         </div>
-    
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                var calendarEl = document.getElementById('calendar');
-                var sidebar = document.getElementById('sidebar');
-                var selectedDate = null;
-    
-                var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'dayGridMonth',
-                    selectable: true,
-                    headerToolbar: {
-                        left: 'prev,next',
-                        center: 'title',
-                        right: '' // Remove week and day view options
-                    },
-                    dateClick: function(info) {
-                        var day = new Date(info.dateStr).getDay();
-                        if (day !== 0 && day !== 6) { // Check if the selected day is not a weekend
-                            sidebar.style.display = 'block'; // Show the sidebar when a date is selected
-                            selectedDate = info.dateStr;
-                        }
-                    },
-                    selectAllow: function(selectInfo) {
-                        var day = selectInfo.start.getDay();
-                        // Prevent selection on weekends (Saturday = 6, Sunday = 0)
-                        return day !== 0 && day !== 6;
-                    }
-                });
-                calendar.render();
-    
-                document.querySelectorAll('.time-slot').forEach(function(slot) {
-                    slot.addEventListener('click', function() {
-                        var selectedTime = this.getAttribute('data-time');
-                        var bookingType = document.getElementById('booking-type').value;
-                        var location = document.getElementById('location').value;
-                        var additionalInfo = document.getElementById('additional-info').value;
-                        if (selectedDate) {
-                            // Redirect to confirmation page
-                            window.location.href = `confirmation?date=${selectedDate}&time=${selectedTime}&type=${bookingType}&location=${location}&info=${additionalInfo}`;
-                        }
-                    });
-                });
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelect = document.getElementById('year');
+            const monthSelect = document.getElementById('month');
+            const daySelect = document.getElementById('day');
+            const dateInput = document.getElementById('date');
+            const startTimeSelect = document.getElementById('start-time');
+            const endTimeSelect = document.getElementById('end-time');
+
+            // Populate the year select element with options
+            const currentYear = new Date().getFullYear();
+            for (let i = currentYear; i <= currentYear + 5; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                yearSelect.appendChild(option);
+            }
+
+            // Populate the month select element with options
+            const months = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            months.forEach((month, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1;
+                option.textContent = month;
+                monthSelect.appendChild(option);
             });
-        </script>
-    </body>
+
+            // Function to populate the day select element based on the selected year and month
+            function populateDays() {
+                const selectedYear = parseInt(yearSelect.value);
+                const selectedMonth = parseInt(monthSelect.value);
+                const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+
+                // Clear existing options
+                daySelect.innerHTML = '';
+
+                // Populate the day select element with options
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = i;
+                    daySelect.appendChild(option);
+                }
+
+                // Disable past dates
+                const today = new Date();
+                if (selectedYear === today.getFullYear() && selectedMonth === today.getMonth() + 1) {
+                    for (let i = 0; i < daySelect.options.length; i++) {
+                        if (parseInt(daySelect.options[i].value) < today.getDate()) {
+                            daySelect.options[i].disabled = true;
+                        }
+                    }
+                }
+            }
+
+            // Populate days when the year or month changes
+            yearSelect.addEventListener('change', populateDays);
+            monthSelect.addEventListener('change', populateDays);
+
+            // Initial population of days
+            populateDays();
+
+            // Function to populate time select elements with options for 00 and 30 minutes
+            function populateTimeSelect(selectElement) {
+                for (let hour = 8; hour <= 17; hour++) {
+                    ['00', '30'].forEach(minute => {
+                        const option = document.createElement('option');
+                        option.value = `${String(hour).padStart(2, '0')}:${minute}`;
+                        option.textContent = `${String(hour).padStart(2, '0')}:${minute}`;
+                        selectElement.appendChild(option);
+                    });
+                }
+            }
+
+            // Populate start time and end time select elements
+            populateTimeSelect(startTimeSelect);
+            populateTimeSelect(endTimeSelect);
+
+            // Disable past times for the current day
+            function disablePastTimes() {
+                const today = new Date();
+                const selectedYear = parseInt(yearSelect.value);
+                const selectedMonth = parseInt(monthSelect.value);
+                const selectedDay = parseInt(daySelect.value);
+
+                if (selectedYear === today.getFullYear() && selectedMonth === today.getMonth() + 1 && selectedDay === today.getDate()) {
+                    const currentTime = today.toTimeString().slice(0, 5);
+                    for (let i = 0; i < startTimeSelect.options.length; i++) {
+                        if (startTimeSelect.options[i].value < currentTime) {
+                            startTimeSelect.options[i].disabled = true;
+                        }
+                    }
+                    for (let i = 0; i < endTimeSelect.options.length; i++) {
+                        if (endTimeSelect.options[i].value < currentTime) {
+                            endTimeSelect.options[i].disabled = true;
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < startTimeSelect.options.length; i++) {
+                        startTimeSelect.options[i].disabled = false;
+                    }
+                    for (let i = 0; i < endTimeSelect.options.length; i++) {
+                        endTimeSelect.options[i].disabled = false;
+                    }
+                }
+            }
+
+            // Disable past times when the day changes
+            daySelect.addEventListener('change', disablePastTimes);
+
+            // Initial disable past times
+            disablePastTimes();
+
+            // Function to update end time options based on selected start time
+            function updateEndTimeOptions() {
+                const selectedStartTime = startTimeSelect.value;
+                for (let i = 0; i < endTimeSelect.options.length; i++) {
+                    if (endTimeSelect.options[i].value <= selectedStartTime) {
+                        endTimeSelect.options[i].disabled = true;
+                    } else {
+                        endTimeSelect.options[i].disabled = false;
+                    }
+                }
+            }
+
+            // Function to update start time options based on selected end time
+            function updateStartTimeOptions() {
+                const selectedEndTime = endTimeSelect.value;
+                for (let i = 0; i < startTimeSelect.options.length; i++) {
+                    if (startTimeSelect.options[i].value >= selectedEndTime) {
+                        startTimeSelect.options[i].disabled = true;
+                    } else {
+                        startTimeSelect.options[i].disabled = false;
+                    }
+                }
+            }
+
+            // Update end time options when start time changes
+            startTimeSelect.addEventListener('change', updateEndTimeOptions);
+
+            // Update start time options when end time changes
+            endTimeSelect.addEventListener('change', updateStartTimeOptions);
+
+            // Function to update month options based on selected year
+            function updateMonthOptions() {
+                const today = new Date();
+                const selectedYear = parseInt(yearSelect.value);
+
+                for (let i = 0; i < monthSelect.options.length; i++) {
+                    if (selectedYear < today.getFullYear() || (selectedYear === today.getFullYear() && parseInt(monthSelect.options[i].value) < today.getMonth() + 1)) {
+                        monthSelect.options[i].disabled = true;
+                    } else {
+                        monthSelect.options[i].disabled = false;
+                    }
+                }
+                populateDays();
+            }
+
+            // Function to update day options based on selected month
+            function updateDayOptions() {
+                populateDays();
+                disablePastTimes();
+            }
+
+            // Update month options when year changes
+            yearSelect.addEventListener('change', updateMonthOptions);
+
+            // Update day options when month changes
+            monthSelect.addEventListener('change', updateDayOptions);
+
+            // Initial update of month options
+            updateMonthOptions();
+
+            // Function to update the hidden date input field
+            function updateDateInput() {
+                const selectedYear = yearSelect.value;
+                const selectedMonth = monthSelect.value.padStart(2, '0');
+                const selectedDay = daySelect.value.padStart(2, '0');
+                dateInput.value = `${selectedYear}-${selectedMonth}-${selectedDay}`;
+            }
+
+            // Update the hidden date input field when year, month, or day changes
+            yearSelect.addEventListener('change', updateDateInput);
+            monthSelect.addEventListener('change', updateDateInput);
+            daySelect.addEventListener('change', updateDateInput);
+
+            // Initial update of the hidden date input field
+            updateDateInput();
+        });
+    </script>
+</body>
 </html>

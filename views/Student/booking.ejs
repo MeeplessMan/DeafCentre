@@ -46,20 +46,22 @@
                     <p><strong>Date:</strong> <%= booking.booking_date %></p>
                     <p><strong>Start time:</strong> <%= booking.booking_start %></p>
                     <p><strong>End time:</strong> <%= booking.booking_end %></p>
-                    <p><strong>Location:</strong> <%= booking.bookig_location %></p>
+                    <p><strong>Location:</strong> <%= booking.booking_location %></p>
                     <p><strong>Details:</strong> <%= booking.booking_details %></p>
                 </div>
-                
-                <div class="update"><a href="updateBooking"><button>Update</button></a></div> 
+                <% if (!completed) { %>
+                <div class="update"><button id="update">Update</button></div>
                 <br><br>
-                <div class="update"><form action="deleteBooking" method="POST">
-                    <input type="hidden" name="booking_id" value="<%= booking.booking_id %>">
-                    <button type="submit">Delete</button>
-                </form></div>
-    
-                <div class="feedback-section"><form action="feedback" method="POST">
+                <% } %>
+                <%if(accepted){%>
+                    <h3>Booking Status: Accepted</h3>
+                    <h3>Interpreter: <%= accepted.interpreter_id %></h3>
+                    
+                <%}%>
+                <% if (accepted&&completed) { %>
+                <div class="feedback-section">
                     <h3>Provide Your Feedback</h3>
-                    <textarea id="feedback" rows="4" placeholder="Write your feedback here..."></textarea>
+                    <textarea id="feedback" name="feedback" rows="4" maxlength="255" placeholder="Write your feedback here..."></textarea>
                     
                     <div class="star-rating">
                         <span class="star" data-value="1">&#9733;</span>
@@ -68,12 +70,86 @@
                         <span class="star" data-value="4">&#9733;</span>
                         <span class="star" data-value="5">&#9733;</span>
                     </div>
-    
-                    <button type="submit">Submit</button> 
-                </div>
+                    
+                    <!-- Hidden input to store the selected star rating -->
+                    <input type="hidden" id="starRating" name="starRating" value="0">
+
+                <div class="update"><button id="submitFeedback">Submit</button></div> 
+                <% } %>
             </div>
         </div>
         </div>
-        <script src="/js/feedback.js"></script>
+        <script >
+            document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star');
+        const starRatingInput = document.getElementById('starRating');
+        const feedbackTextarea = document.getElementById('feedback');
+        const submitButton = document.getElementById('submitFeedback');
+        const deleteButton = document.getElementById('deleteBooking');
+        const updateButton = document.getElementById('updateBooking');
+
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.getAttribute('data-value');
+                starRatingInput.value = rating;
+                // Remove 'selected' class from all stars
+                stars.forEach(s => s.classList.remove('selected'));
+                // Add 'selected' class to the clicked star and all previous stars
+                for (let i = 0; i < rating; i++) {
+                    stars[i].classList.add('selected');
+                }
+            });
+        });
+
+        submitButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const feedback = feedbackTextarea.value;
+            const starRating = starRatingInput.value;
+            // Create a form dynamically
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/student/feedback';
+            // Create hidden input elements for feedback and star rating
+            const feedbackInput = document.createElement('input');
+            feedbackInput.type = 'hidden';
+            feedbackInput.name = 'feedback';
+            feedbackInput.value = feedback;
+            const starRatingHiddenInput = document.createElement('input');
+            starRatingHiddenInput.type = 'hidden';
+            starRatingHiddenInput.name = 'starRating';
+            starRatingHiddenInput.value = starRating;
+            const bookingIdInput = document.createElement('input');
+            bookingIdInput.type = 'hidden';
+            bookingIdInput.name = 'bookingId';
+            bookingIdInput.value = '<%= booking.booking_id %>';
+            // Append inputs to the form
+            form.appendChild(feedbackInput);
+            form.appendChild(starRatingHiddenInput);
+            form.appendChild(bookingIdInput);
+            // Append form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        });
+
+        updateButton.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const bookingId = '<%= booking.booking_id %>';
+            // Create a form dynamically
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/student/updateBooking';
+            // Create hidden input element for booking ID
+            const bookingIdInput = document.createElement('input');
+            bookingIdInput.type = 'hidden';
+            bookingIdInput.name = 'bookingId';
+            bookingIdInput.value = bookingId;
+            // Append input to the form
+            form.appendChild(bookingIdInput);
+            // Append form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+        </script>
     </body>
 </html>

@@ -40,13 +40,16 @@
     </section>
     <div class="main-content1">
         <div class="container1">
-            <h2>Bookings</h2>
+            <h2>Accepted Bookings</h2>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Type</th>
+                            <th>Student No.</th>
+                            <th>Lecturer No.</th>
+                            <th>Admin ID</th>
                             <th>Date</th>
                             <th>Start</th>
                             <th>End</th>
@@ -60,6 +63,9 @@
                             <tr>
                                 <td><%= bookings[i].booking_id %></td>
                                 <td><%= bookings[i].booking_type %></td>
+                                <td><%= bookings[i].student_num %></td>
+                                <td><%= bookings[i].lecturer_num %></td>
+                                <td><%= bookings[i].admin_id %></td>
                                 <td><%= bookings[i].booking_date %></td>
                                 <td><%= bookings[i].booking_start %></td>
                                 <td><%= bookings[i].booking_end %></td>
@@ -80,13 +86,16 @@
     </div>
     <div class="main-content1">
         <div class="container1">
-            <h2>Bookings</h2>
+            <h2>Available Bookings</h2>
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Type</th>
+                            <th>Student No.</th>
+                            <th>Lecturer No.</th>
+                            <th>Admin ID</th>
                             <th>Date</th>
                             <th>Start</th>
                             <th>End</th>
@@ -100,6 +109,9 @@
                             <tr>
                                 <td><%= available[i].booking_id %></td>
                                 <td><%= available[i].booking_type %></td>
+                                <td><%= available[i].student_num %></td>
+                                <td><%= available[i].lecturer_num %></td>
+                                <td><%= available[i].admin_id %></td>
                                 <td><%= available[i].booking_date %></td>
                                 <td><%= available[i].booking_start %></td>
                                 <td><%= available[i].booking_end %></td>

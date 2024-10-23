@@ -40,7 +40,47 @@
     </section>
     <div class="main-content1">
         <div class="container1">
-            <h2>Bookings</h2>
+            <h2>Accepted Bookings</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Location</th>
+                            <th>Details</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < accepted.length; i++){ %>
+                            <tr>
+                                <td><%= accepted[i].booking_id %></td>
+                                <td><%= accepted[i].booking_type %></td>
+                                <td><%= accepted[i].booking_date %></td>
+                                <td><%= accepted[i].booking_start %></td>
+                                <td><%= accepted[i].booking_end %></td>
+                                <td><%= accepted[i].booking_location %></td>
+                                <td><%= accepted[i].booking_details %></td>
+                                <td>
+                                    <form action="booking" method="post">
+                                        <input type="hidden" name="id" value="<%= bookings[i].booking_id %>">
+                                        <button type="submit">View</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="main-content1">
+        <div class="container1">
+            <h2>Unaccepted Bookings</h2>
             <div class="table-container">
                 <table>
                     <thead>

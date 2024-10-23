@@ -53,7 +53,9 @@ router.post('/booking', async(req, res)=>{
         return res.status(200).redirect('/lecturer/login');
     }
     const booking = await data.getBooking(req.body.id);
-    res.status(200).render('Lecturer/booking', {booking, user});
+    const accepted = await data.checkAcceptedBooking(req.body.id);
+    const completed = await data.isCompletedBooking(req.body.id);
+    res.status(200).render('Lecturer/booking', {booking, user, accepted, completed});
 })
 
 router.get('/profile', async(req, res)=>{
